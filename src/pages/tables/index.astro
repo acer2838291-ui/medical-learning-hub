@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="表格整理" description="編輯、儲存及匯出個人比較表。">
+  <main class="tool-page"><p class="eyebrow">TABLE WORKSPACE</p><h1>表格整理</h1>
+    <p>表格保存在目前瀏覽器。請勿輸入可識別患者資料。</p>
+    <div class="card-grid"><label>表格名稱<input id="table-title" value="未命名比較表" /></label><label>搜尋儲存格<input id="table-search" placeholder="輸入要尋找的字" /></label></div>
+    <div class="card-grid"><button id="add-row">新增列</button><button id="remove-row">刪除末列</button><button id="add-col">新增欄</button><button id="remove-col">刪除末欄</button><button id="save-table">儲存表格</button><button id="export-csv">匯出 CSV</button><button id="export-md">匯出 Markdown</button><label>匯入 CSV<input id="import-csv" type="file" accept=".csv,text/csv" /></label></div>
+    <div class="table-scroll"><table id="editable-table" aria-label="可編輯比較表"><thead><tr><th contenteditable="true">欄位 1</th><th contenteditable="true">欄位 2</th><th contenteditable="true">欄位 3</th></tr></thead><tbody><tr><td contenteditable="true">點此編輯</td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody></table></div>
+    <output id="table-status" aria-live="polite"></output>
+  </main>
+  <script>
+    const table = document.querySelector('#editable-table'); const key = 'mlh-table-v1'; const status = document.querySelector('#table-status');
+    const rows = () => [...table.rows].map((row) => [...row.cells].map((cell) => cell.textContent));
+    const restore = (data) => { table.replaceChildren(); const head = table.createTHead().insertRow(); data[0].forEach((value) => { const cell = document.createElement('th'); cell.contentEditable = 'true'; cell.textContent = value; head.append(cell); }); const body = table.createTBody(); data.slice(1).forEach((values) => { const row = body.insertRow(); values.forEach((value) => { const cell = row.insertCell(); cell.contentEditable = 'true'; cell.textContent = value; }); }); };
+    document.querySelector('#add-row').onclick = () => { const row = table.tBodies[0].insertRow(); for (let i=0;i<table.tHead.rows[0].cells.length;i++) { const cell=row.insertCell(); cell.contentEditable='true'; } };
+    document.querySelector('#remove-row').onclick = () => { if (table.tBodies[0].rows.length > 1) table.tBodies[0].deleteRow(-1); };
+    document.querySelector('#add-col').onclick = () => { [...table.rows].forEach((row,i) => { const cell = i===0 ? document.createElement('th') : document.createElement('td'); cell.contentEditable='true'; row.append(cell); }); };
+    document.querySelector('#remove-col').onclick = () => { if (table.rows[0].cells.length > 1) [...table.rows].forEach((row) => row.deleteCell(-1)); };
+    document.querySelector('#save-table').onclick = () => { localStorage.setItem(key, JSON.stringify({ title: document.querySelector('#table-title').value, data: rows() })); status.textContent='已儲存在此瀏覽器。'; };
+    document.querySelector('#table-search').addEventListener('input',(e)=>{ const term=e.target.value.toLocaleLowerCase(); [...table.rows].forEach((row,i)=>row.hidden=i>0 && term && !row.textContent.toLocaleLowerCase().includes(term)); });
+    const download = (text,name,type) => { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href); };
+    document.querySelector('#export-csv').onclick=()=>download(rows().map(r=>r.map(v=>`"${v.replaceAll('"','""')}"`).join(',')).join('\r\n'),'comparison.csv','text/csv');
+    document.querySelector('#export-md').onclick=()=>{ const data=rows(); download(`| ${data[0].join(' | ')} |\n| ${data[0].map(()=> '---').join(' | ')} |\n${data.slice(1).map(r=>`| ${r.join(' | ')} |`).join('\n')}`,'comparison.md','text/markdown'); };
+    document.querySelector('#import-csv').addEventListener('change',async(e)=>{ const text=await e.target.files[0]?.text(); if(!text)return; const parsed=text.trim().split(/\r?\n/).map(line=>line.split(',').map(v=>v.replace(/^"|"$/g,'').replaceAll('""','"'))); if(parsed.some(r=>r.length!==parsed[0].length)){status.textContent='CSV 欄數不一致，無法匯入。';return;} restore(parsed); status.textContent='CSV 已載入；請按「儲存表格」保存。'; });
+    const saved=JSON.parse(localStorage.getItem(key)||'null'); if(saved){document.querySelector('#table-title').value=saved.title;restore(saved.data);}
+  </script>
+</BaseLayout>

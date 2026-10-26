@@ -1,0 +1,45 @@
+:root {
+  --sl-color-accent-low: #eee9df;
+  --sl-color-accent: #a5684d;
+  --sl-color-accent-high: #754b39;
+  --sl-color-white: #fffefa;
+  --sl-color-gray-1: #f8f7f2;
+  --sl-color-gray-2: #efeee8;
+  --sl-color-gray-3: #deddd4;
+  --sl-color-gray-4: #9b9e96;
+  --sl-color-gray-5: #737a75;
+  --sl-color-gray-6: #4b5650;
+  --sl-color-black: #293833;
+  --sl-font: var(--mlh-font-body);
+  --sl-content-width: 49rem;
+}
+
+html { background: var(--mlh-bg); scroll-behavior: smooth; }
+body { color: var(--mlh-text); background: var(--mlh-bg); font-family: var(--mlh-font-body); }
+.header { min-height: 5.35rem; background: var(--mlh-bg); border-bottom: 1px solid var(--mlh-border); }
+.sidebar-pane, .right-sidebar { background: var(--mlh-sidebar); }
+.content-panel { background: var(--mlh-surface); }
+.sl-markdown-content { font-size: 1.06rem; line-height: 1.85; }
+.sl-markdown-content h1, .sl-markdown-content h2, .sl-markdown-content h3 { color: var(--mlh-heading); letter-spacing: .015em; }
+.sl-markdown-content h1 { font-size: clamp(2rem, 3vw, 2.85rem); line-height: 1.3; }
+.sl-markdown-content a { color: var(--mlh-link); text-underline-offset: .18em; }
+.sl-markdown-content a:hover, .sidebar-content a:hover { background: var(--mlh-hover); }
+.sidebar-content a[aria-current="page"] { color: var(--mlh-active); font-weight: 700; background: var(--mlh-hover); }
+.sl-markdown-content :is(table, pre) { border-color: var(--mlh-border); }
+.sl-markdown-content blockquote, .mlh-callout { border-inline-start: 3px solid var(--mlh-accent); background: var(--mlh-callout); padding: 1rem 1.25rem; }
+.mlh-keypoint { color: var(--mlh-error); font-weight: 700; }
+.mlh-term { color: var(--mlh-link); font-family: var(--mlh-font-medical); font-weight: 650; }
+.mlh-card { border: 1px solid var(--mlh-border); border-radius: var(--mlh-radius); background: var(--mlh-surface-raised); box-shadow: var(--mlh-shadow); }
+.mlh-callout { margin-block: 1.5rem; }
+.mlh-callout--warning { border-inline-start-color: var(--mlh-warning); }
+.mlh-callout--keypoint { border-inline-start-color: var(--mlh-error); }
+.mlh-formula, .mlh-note-metadata { border: 1px solid var(--mlh-border); border-radius: var(--mlh-radius); background: var(--mlh-callout); padding: 1rem 1.25rem; }
+.mlh-formula__expression { color: var(--mlh-heading); font-family: var(--mlh-font-medical); font-size: 1.15em; font-weight: 650; padding-block: .5rem; }
+.mlh-formula__caution { color: var(--mlh-muted); font-size: .92em; }
+.mlh-table-scroll { overflow-x: auto; max-width: 100%; }
+.mlh-table-scroll:focus { outline: 2px solid var(--mlh-accent); outline-offset: 2px; }
+@media (max-width: 50rem) {
+  .header { min-height: 3.75rem; }
+  .sl-markdown-content { font-size: 1rem; line-height: 1.8; }
+  .sl-markdown-content table { display: block; overflow-x: auto; }
+}

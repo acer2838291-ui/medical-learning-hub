@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="我的文獻庫" description="在此瀏覽器管理文獻書目資料。">
+  <main class="tool-page">
+    <p class="eyebrow">LITERATURE</p><h1>我的文獻庫</h1>
+    <p>這個原型只在目前瀏覽器保存書目欄位，不會上傳 PDF 或傳送資料。正式版須改用私有資料儲存區。</p>
+    <form id="paper-form" class="tool-card">
+      <label>文獻標題<input name="title" required maxlength="240" /></label>
+      <label>作者<input name="authors" maxlength="240" /></label>
+      <label>DOI<input name="doi" maxlength="120" /></label>
+      <label>PMID<input name="pmid" maxlength="30" /></label>
+      <label>閱讀狀態<select name="status"><option>待閱讀</option><option>閱讀中</option><option>已讀</option></select></label>
+      <label>個人標籤<input name="tags" maxlength="240" /></label>
+      <button type="submit">新增文獻</button>
+    </form>
+    <div class="callout"><strong>著作權：</strong>僅匯入你有合法存取權的 PDF。不要把受限制的全文 PDF 放進公開網站或 Repository。</div>
+    <h2>已儲存文獻</h2><button id="export-papers" type="button">匯出書目 JSON</button>
+    <ul id="paper-list" class="card-grid"></ul>
+  </main>
+  <script>
+    const key = 'mlh-literature-v1';
+    const list = document.querySelector('#paper-list');
+    const render = () => {
+      list.replaceChildren();
+      const papers = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!papers.length) { list.innerHTML = '<li class="empty-state">目前沒有文獻。新增後會保存在這個瀏覽器。</li>'; return; }
+      for (const paper of papers) {
+        const item = document.createElement('li'); item.className = 'tool-card';
+        const heading = document.createElement('h3'); heading.textContent = paper.title;
+        const details = document.createElement('p'); details.textContent = [paper.authors, paper.doi && `DOI: ${paper.doi}`, paper.pmid && `PMID: ${paper.pmid}`, paper.status, paper.tags].filter(Boolean).join(' · ');
+        const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '移除'; remove.addEventListener('click', () => { save(papers.filter((p) => p.id !== paper.id)); });
+        item.append(heading, details, remove); list.append(item);
+      }
+    };
+    const save = (papers) => { localStorage.setItem(key, JSON.stringify(papers)); render(); };
+    document.querySelector('#paper-form').addEventListener('submit', (event) => {
+      event.preventDefault(); const fields = Object.fromEntries(new FormData(event.currentTarget));
+      const papers = JSON.parse(localStorage.getItem(key) || '[]'); papers.unshift({ ...fields, id: crypto.randomUUID(), createdAt: new Date().toISOString() }); save(papers); event.currentTarget.reset();
+    });
+    document.querySelector('#export-papers').addEventListener('click', () => {
+      const blob = new Blob([localStorage.getItem(key) || '[]'], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'literature.json'; a.click(); URL.revokeObjectURL(a.href);
+    });
+    render();
+  </script>
+</BaseLayout>

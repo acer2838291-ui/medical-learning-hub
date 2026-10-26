@@ -1,0 +1,35 @@
+---
+const { title, description = '醫學筆記、文獻閱讀與醫師國考練習。' } = Astro.props;
+import '../styles/tokens.css';
+import '../styles/tools.css';
+---
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8f7f2" />
+    <title>{title}｜Medical Learning Hub</title>
+  </head>
+  <body>
+    <header class="tool-header">
+      <a class="brand" href="/">Medical Learning Hub</a>
+      <nav aria-label="主要導覽">
+        <a href="/">首頁</a><a href="/medicine-3/">醫學筆記</a><a href="/literature/">文獻閱讀</a><a href="/practice/">國考練習</a><a href="/calculators/">計算器</a><a href="/tables/">表格</a>
+      </nav>
+      <button type="button" id="theme-toggle" aria-label="切換明暗主題">◐</button>
+    </header>
+    <slot />
+    <footer class="tool-footer">Medical Learning Hub · 個人醫學學習工具 · 教育用途</footer>
+    <script>
+      const saved = localStorage.getItem('mlh-theme');
+      if (saved === 'dark') document.documentElement.dataset.theme = 'dark';
+      document.querySelector('#theme-toggle').addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        if (next === 'dark') document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+        localStorage.setItem('mlh-theme', next);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="國考練習" description="依考科與專科練習並記錄作答。">
+  <main class="tool-page">
+    <p class="eyebrow">EXAM PRACTICE</p><h1>國考練習</h1>
+    <p>以下為自編操作示範題，並非醫師國考歷屆試題。正式題目需標示年度、考科、題號與公開來源。</p>
+    <article class="tool-card" id="quiz">
+      <p class="eyebrow">自編示範題</p>
+      <h2>脈搏血氧儀的 SpO₂ 主要估計哪一項？</h2>
+      <form id="demo-quiz">
+        <label><input type="radio" name="answer" value="a" required /> 血紅素總量</label>
+        <label><input type="radio" name="answer" value="b" /> 血紅素氧合比例</label>
+        <label><input type="radio" name="answer" value="c" /> 心輸出量</label>
+        <button type="submit">提交答案</button>
+      </form>
+      <output id="quiz-result" aria-live="polite"></output>
+      <details><summary>查看解析</summary><p>SpO₂ 是脈搏血氧儀對動脈血紅素氧合比例的估計；它不直接測得 Hb 總量、PaCO₂ 或心輸出量。</p></details>
+    </article>
+    <p><a href="/practice/records/">查看本機作答紀錄</a></p>
+  </main>
+  <script>
+    const form = document.querySelector('#demo-quiz');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const correct = new FormData(form).get('answer') === 'b';
+      const result = document.querySelector('#quiz-result');
+      result.textContent = correct ? '答對。這是自編示範題。' : '再想一次。答案解析可展開查看。';
+      result.className = correct ? 'result' : 'error';
+      const key = 'mlh-demo-answers';
+      const history = JSON.parse(localStorage.getItem(key) || '[]');
+      history.push({ id: 'demo-spo2-001', correct, answeredAt: new Date().toISOString() });
+      localStorage.setItem(key, JSON.stringify(history));
+    });
+  </script>
+</BaseLayout>

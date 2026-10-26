@@ -1,0 +1,4 @@
+---
+const { term, english, chinese } = Astro.props;
+---
+<abbr class="mlh-term" title={`${english}｜${chinese}`} aria-label={`${term}，${english}，${chinese}`}>{term}</abbr>

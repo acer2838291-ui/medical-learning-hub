@@ -1,0 +1,45 @@
+:root {
+  color-scheme: light;
+  --mlh-bg: #f8f7f2;
+  --mlh-surface: #fcfbf7;
+  --mlh-surface-raised: #fffefa;
+  --mlh-sidebar: #f8f7f2;
+  --mlh-text: #293833;
+  --mlh-muted: #737a75;
+  --mlh-heading: #263c36;
+  --mlh-accent: #a5684d;
+  --mlh-link: #52796c;
+  --mlh-border: #deddd4;
+  --mlh-active: #a5684d;
+  --mlh-hover: #efeee7;
+  --mlh-callout: #f1eee5;
+  --mlh-success: #477663;
+  --mlh-warning: #a5684d;
+  --mlh-error: #a4423b;
+  --mlh-radius: 0.35rem;
+  --mlh-shadow: none;
+  --mlh-reading-width: 49rem;
+  --mlh-sidebar-width: 17.25rem;
+  --mlh-font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mlh-font-medical: "Inter", "Noto Sans", Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --mlh-bg: #202724;
+  --mlh-surface: #252d29;
+  --mlh-surface-raised: #2b3430;
+  --mlh-sidebar: #202724;
+  --mlh-text: #e7e8df;
+  --mlh-muted: #b2b9b2;
+  --mlh-heading: #e4e7dc;
+  --mlh-accent: #d39a79;
+  --mlh-link: #a5c6b6;
+  --mlh-border: #414a44;
+  --mlh-active: #d39a79;
+  --mlh-hover: #303a34;
+  --mlh-callout: #303a34;
+  --mlh-success: #91c3a8;
+  --mlh-warning: #e0a480;
+  --mlh-error: #ef9a91;
+}

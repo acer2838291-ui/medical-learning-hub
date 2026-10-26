@@ -1,0 +1,9 @@
+---
+const { type = 'note', title } = Astro.props;
+const labels = { note: '重點', warning: '注意', keypoint: '考點' };
+const label = title ?? labels[type] ?? labels.note;
+---
+<aside class={`mlh-callout mlh-callout--${type}`} role="note" aria-label={label}>
+  <strong>{label}</strong>
+  <div><slot /></div>
+</aside>

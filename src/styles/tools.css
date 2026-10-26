@@ -1,0 +1,31 @@
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--mlh-text); background: var(--mlh-bg); font: 16px/1.75 var(--mlh-font-body); }
+a { color: var(--mlh-link); }
+.tool-header { min-height: 5.2rem; display:flex; align-items:center; gap:2rem; padding: .8rem clamp(1rem,4vw,3.5rem); border-bottom:1px solid var(--mlh-border); background:var(--mlh-bg); }
+.tool-header .brand { color:var(--mlh-heading); font-size:1.12rem; font-weight:750; text-decoration:none; white-space:nowrap; }
+.tool-header nav { display:flex; flex-wrap:wrap; gap:1.15rem; flex:1; }
+.tool-header nav a { color:var(--mlh-muted); text-decoration:none; font-size:.92rem; }
+.tool-header nav a:hover { color:var(--mlh-accent); }
+button { color:var(--mlh-heading); background:var(--mlh-surface-raised); border:1px solid var(--mlh-border); border-radius:var(--mlh-radius); padding:.55rem .9rem; font:inherit; cursor:pointer; }
+button:hover { background:var(--mlh-hover); }
+.tool-page { max-width:72rem; margin:0 auto; padding:clamp(2rem,5vw,4.5rem) clamp(1rem,4vw,2rem); min-height:75vh; }
+.tool-page h1 { color:var(--mlh-heading); font:600 clamp(2.1rem,4vw,3rem)/1.25 Georgia,"Noto Serif TC",serif; margin:.2rem 0 1rem; }
+.tool-page h2 { color:var(--mlh-heading); line-height:1.35; }
+.eyebrow { font-size:.75rem; letter-spacing:.16em; color:var(--mlh-accent); font-weight:700; }
+.callout { background:var(--mlh-callout); border-inline-start:3px solid var(--mlh-accent); padding:1rem 1.25rem; margin:1.5rem 0; }
+.calculator-grid,.card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr)); gap:1rem; margin:2rem 0; }
+.tool-card { background:var(--mlh-surface-raised); border:1px solid var(--mlh-border); border-radius:var(--mlh-radius); padding:1.2rem; }
+form { display:grid; gap:.8rem; }
+label { display:grid; gap:.25rem; color:var(--mlh-muted); }
+input,textarea,select { width:100%; color:var(--mlh-text); background:var(--mlh-surface); border:1px solid var(--mlh-border); border-radius:var(--mlh-radius); padding:.6rem .7rem; font:inherit; }
+input[type="radio"],input[type="checkbox"] { width:auto; margin-right:.4rem; }
+form label:has(input[type="radio"]) { display:block; color:var(--mlh-text); }
+output { display:block; min-height:1.5rem; margin-top:.4rem; font-weight:700; }
+.result { color:var(--mlh-success); }.error { color:var(--mlh-error); }
+.tool-footer { border-top:1px solid var(--mlh-border); text-align:center; color:var(--mlh-muted); padding:1.5rem; font-size:.85rem; }
+.empty-state { border:1px dashed var(--mlh-border); border-radius:var(--mlh-radius); padding:1.5rem; color:var(--mlh-muted); }
+.table-scroll { overflow:auto; max-width:100%; }
+table { border-collapse:collapse; min-width:34rem; width:100%; }
+th,td { border:1px solid var(--mlh-border); padding:.55rem; text-align:left; }
+td[contenteditable="true"]:focus { outline:2px solid var(--mlh-accent); outline-offset:-2px; }
+@media(max-width:760px) { .tool-header { align-items:flex-start; flex-wrap:wrap; gap:.7rem; } .tool-header nav { order:3; flex-basis:100%; gap:.7rem 1rem; } .tool-page { padding-top:2rem; } }

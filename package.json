@@ -1,0 +1,24 @@
+{
+  "name": "medical-learning-hub",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "playwright test",
+    "generate:taxonomy": "node scripts/generate-specialty-pages.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.7",
+    "astro": "^7.4.2",
+    "pdfjs-dist": "^5.4.624"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "typescript": "^5.9.2",
+    "zod": "^4.1.12"
+  }
+}

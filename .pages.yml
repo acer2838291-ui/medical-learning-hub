@@ -1,0 +1,70 @@
+media: public/demo-assets
+content:
+  - name: medical-notes
+    label: 醫學筆記
+    type: collection
+    path: src/content/docs
+    filename: "{slug}.mdx"
+    format: yaml-frontmatter
+    subfolders: true
+    exclude:
+      - index.mdx
+    view:
+      primary: title
+      sort: title
+      order: asc
+    fields:
+      - name: title
+        label: 標題
+        type: string
+        required: true
+      - name: description
+        label: 摘要
+        type: text
+      - name: exam
+        label: 國考考科
+        type: select
+        options:
+          values: [medicine-3, medicine-4, medicine-5, medicine-6]
+      - name: specialty
+        label: 主專科 ID
+        type: string
+      - name: tags
+        label: 主題標籤
+        type: string
+        list: true
+      - name: sources
+        label: 來源與授權備註
+        type: string
+        list: true
+      - name: slug
+        label: 網址代稱
+        type: string
+        required: true
+      - name: relatedSpecialties
+        label: 相關專科 ID
+        type: string
+        list: true
+      - name: relatedLiterature
+        label: 相關文獻 ID
+        type: string
+        list: true
+      - name: relatedQuestions
+        label: 相關題目 ID
+        type: string
+        list: true
+      - name: draft
+        label: 草稿
+        type: boolean
+      - name: body
+        label: 內容
+        type: rich-text
+  - name: public-demo-assets
+    label: 公開示範媒體
+    type: collection
+    path: public/demo-assets
+    format: raw
+    fields:
+      - name: file
+        label: 檔案
+        type: file

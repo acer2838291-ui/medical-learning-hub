@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="答題紀錄" description="目前瀏覽器中的示範作答紀錄。">
+  <main class="tool-page"><p class="eyebrow">LOCAL RECORDS</p><h1>答題紀錄</h1>
+    <p>紀錄只存在此瀏覽器的 localStorage。清除瀏覽資料會移除紀錄；匯出備份功能尚未完成。</p>
+    <button id="export-records" type="button">匯出 JSON</button><button id="clear-records" type="button">清除此機紀錄</button>
+    <ol id="record-list"></ol>
+  </main>
+  <script>
+    const key = 'mlh-demo-answers';
+    const render = () => {
+      const list = document.querySelector('#record-list');
+      const records = JSON.parse(localStorage.getItem(key) || '[]');
+      list.innerHTML = records.length ? records.map((r) => `<li>${r.id}｜${r.correct ? '答對' : '答錯'}｜${new Date(r.answeredAt).toLocaleString()}</li>`).join('') : '<li>目前沒有示範作答紀錄。</li>';
+    };
+    render();
+    document.querySelector('#export-records').addEventListener('click', () => {
+      const blob = new Blob([localStorage.getItem(key) || '[]'], { type: 'application/json' });
+      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'medical-learning-hub-answers.json'; link.click(); URL.revokeObjectURL(link.href);
+    });
+    document.querySelector('#clear-records').addEventListener('click', () => { localStorage.removeItem(key); render(); });
+  </script>
+</BaseLayout>

@@ -1,0 +1,6 @@
+---
+const { label = '醫學比較表' } = Astro.props;
+---
+<div class="mlh-table-scroll" role="region" aria-label={label} tabindex="0">
+  <table><slot /></table>
+</div>

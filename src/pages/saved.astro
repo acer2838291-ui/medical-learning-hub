@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="我的收藏" description="管理目前瀏覽器中的收藏連結。">
+  <main class="tool-page"><p class="eyebrow">SAVED ITEMS</p><h1>我的收藏</h1>
+    <p>收藏網址與備註只存在目前瀏覽器。請勿在此保存患者資訊。</p>
+    <form id="saved-form" class="tool-card"><label>名稱<input name="title" required /></label><label>網址<input name="url" type="url" required /></label><label>備註<textarea name="note"></textarea></label><button>加入收藏</button></form>
+    <ul id="saved-list" class="card-grid"></ul>
+  </main>
+  <script>
+    const key='mlh-saved-v1';const list=document.querySelector('#saved-list');
+    const render=()=>{list.replaceChildren();const items=JSON.parse(localStorage.getItem(key)||'[]');if(!items.length){list.innerHTML='<li class="empty-state">目前沒有收藏。</li>';return;}for(const item of items){const li=document.createElement('li');li.className='tool-card';const a=document.createElement('a');a.href=item.url;a.textContent=item.title;a.rel='noopener noreferrer';const p=document.createElement('p');p.textContent=item.note;const del=document.createElement('button');del.textContent='移除';del.onclick=()=>{localStorage.setItem(key,JSON.stringify(items.filter(x=>x.id!==item.id)));render();};li.append(a,p,del);list.append(li);}};
+    document.querySelector('#saved-form').addEventListener('submit',(e)=>{e.preventDefault();const items=JSON.parse(localStorage.getItem(key)||'[]');items.unshift({...Object.fromEntries(new FormData(e.currentTarget)),id:crypto.randomUUID()});localStorage.setItem(key,JSON.stringify(items));e.currentTarget.reset();render();});render();
+  </script>
+</BaseLayout>

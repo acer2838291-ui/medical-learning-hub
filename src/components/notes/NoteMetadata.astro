@@ -1,0 +1,9 @@
+---
+const { examLabel, specialty, tags = [], sources = [] } = Astro.props;
+---
+<aside class="mlh-note-metadata" aria-label="筆記資料">
+  <p><strong>考科：</strong>{examLabel}</p>
+  <p><strong>專科：</strong>{specialty}</p>
+  {tags.length > 0 && <p><strong>標籤：</strong>{tags.join('、')}</p>}
+  {sources.length > 0 && <p><strong>來源：</strong>{sources.join('；')}</p>}
+</aside>

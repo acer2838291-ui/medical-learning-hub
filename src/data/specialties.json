@@ -1,0 +1,14 @@
+[
+  {"exam":"medicine-3","examLabel":"醫學（三）","scope":"內科、家庭醫學科","specialties":[
+    {"id":"internal-medicine","name":"內科總論"},{"id":"cardiology","name":"心臟內科"},{"id":"pulmonology","name":"胸腔內科"},{"id":"gastroenterology","name":"腸胃及肝膽胰"},{"id":"nephrology","name":"腎臟內科"},{"id":"endocrinology","name":"內分泌及新陳代謝"},{"id":"infectious-disease","name":"感染科"},{"id":"hematology-oncology","name":"血液腫瘤科"},{"id":"rheumatology-allergy","name":"風濕免疫及過敏"},{"id":"family-medicine","name":"家庭醫學科"}
+  ]},
+  {"exam":"medicine-4","examLabel":"醫學（四）","scope":"小兒、皮膚、神經、精神","specialties":[
+    {"id":"pediatrics","name":"小兒科","children":[{"id":"neonatology","name":"新生兒"},{"id":"pediatric-infectious","name":"小兒感染"},{"id":"pediatric-cardiology","name":"小兒心臟"},{"id":"pediatric-pulmonology","name":"小兒胸腔"},{"id":"pediatric-gastroenterology","name":"小兒腸胃"},{"id":"pediatric-neurology","name":"小兒神經"},{"id":"pediatric-nephrology","name":"小兒腎臟"},{"id":"pediatrics-other","name":"小兒其他"}]},{"id":"dermatology","name":"皮膚科"},{"id":"neurology","name":"神經科"},{"id":"psychiatry","name":"精神科"}
+  ]},
+  {"exam":"medicine-5","examLabel":"醫學（五）","scope":"外科、骨科、泌尿科","specialties":[
+    {"id":"surgery","name":"外科總論"},{"id":"general-surgery","name":"一般外科"},{"id":"colorectal-surgery","name":"消化及大腸直腸外科"},{"id":"cardiovascular-surgery","name":"心臟血管外科"},{"id":"thoracic-surgery","name":"胸腔外科"},{"id":"neurosurgery","name":"神經外科"},{"id":"breast-endocrine-surgery","name":"乳房與內分泌外科"},{"id":"plastic-surgery","name":"整形與重建外科"},{"id":"pediatric-surgery","name":"小兒外科"},{"id":"orthopedics","name":"骨科"},{"id":"urology","name":"泌尿科"}
+  ]},
+  {"exam":"medicine-6","examLabel":"醫學（六）","scope":"麻醉、眼、耳鼻喉、婦產、復健","specialties":[
+    {"id":"anesthesiology","name":"麻醉科"},{"id":"ophthalmology","name":"眼科"},{"id":"otolaryngology","name":"耳鼻喉科"},{"id":"obstetrics-gynecology","name":"婦產科","children":[{"id":"obstetrics","name":"產科"},{"id":"general-gynecology","name":"一般婦科"},{"id":"reproductive-endocrinology","name":"生殖內分泌"},{"id":"gynecologic-oncology","name":"婦癌"}]},{"id":"rehabilitation","name":"復健科"}
+  ]}
+]

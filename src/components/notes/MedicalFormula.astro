@@ -1,0 +1,9 @@
+---
+const { name, source, caution } = Astro.props;
+---
+<figure class="mlh-formula" aria-label={name}>
+  <figcaption>{name}</figcaption>
+  <div class="mlh-formula__expression"><slot /></div>
+  {caution && <p class="mlh-formula__caution">{caution}</p>}
+  {source && <small>來源：{source}</small>}
+</figure>

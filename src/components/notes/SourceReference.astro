@@ -1,0 +1,4 @@
+---
+const { href, label, page } = Astro.props;
+---
+<span class="mlh-source"><a href={href} target="_blank" rel="noopener noreferrer">{label}</a>{page && <span>，{page}</span>}</span>
