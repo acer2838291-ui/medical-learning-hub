@@ -1,5 +1,6 @@
 ---
 const { title, description = '醫學筆記、文獻閱讀與醫師國考練習。' } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
 import '../styles/tokens.css';
 import '../styles/tools.css';
 ---
@@ -14,9 +15,9 @@ import '../styles/tools.css';
   </head>
   <body>
     <header class="tool-header">
-      <a class="brand" href="/">Medical Learning Hub</a>
+      <a class="brand" href={baseUrl}>Medical Learning Hub</a>
       <nav aria-label="主要導覽">
-        <a href="/">首頁</a><a href="/medicine-3/">醫學筆記</a><a href="/literature/">文獻閱讀</a><a href="/practice/">國考練習</a><a href="/calculators/">計算器</a><a href="/tables/">表格</a>
+        <a href={baseUrl}>首頁</a><a href={`${baseUrl}medicine-3/`}>醫學筆記</a><a href={`${baseUrl}literature/`}>文獻閱讀</a><a href={`${baseUrl}practice/`}>國考練習</a><a href={`${baseUrl}calculators/`}>計算器</a><a href={`${baseUrl}tables/`}>表格</a>
       </nav>
       <button type="button" id="theme-toggle" aria-label="切換明暗主題">◐</button>
     </header>

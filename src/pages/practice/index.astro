@@ -17,7 +17,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <output id="quiz-result" aria-live="polite"></output>
       <details><summary>查看解析</summary><p>SpO₂ 是脈搏血氧儀對動脈血紅素氧合比例的估計；它不直接測得 Hb 總量、PaCO₂ 或心輸出量。</p></details>
     </article>
-    <p><a href="/practice/records/">查看本機作答紀錄</a></p>
+    <p><a href={`${import.meta.env.BASE_URL}practice/records/`}>查看本機作答紀錄</a></p>
   </main>
   <script>
     const form = document.querySelector('#demo-quiz');
