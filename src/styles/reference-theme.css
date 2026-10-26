@@ -1,32 +1,72 @@
 :root {
-  --sl-color-accent-low: #eee9df;
-  --sl-color-accent: #a5684d;
-  --sl-color-accent-high: #754b39;
-  --sl-color-white: #fffefa;
-  --sl-color-gray-1: #f8f7f2;
-  --sl-color-gray-2: #efeee8;
-  --sl-color-gray-3: #deddd4;
-  --sl-color-gray-4: #9b9e96;
-  --sl-color-gray-5: #737a75;
-  --sl-color-gray-6: #4b5650;
-  --sl-color-black: #293833;
   --sl-font: var(--mlh-font-body);
-  --sl-content-width: 49rem;
+  --sl-content-width: var(--mlh-reading-width);
+  --sl-sidebar-width: var(--mlh-sidebar-width);
+  --sl-nav-height: 4.6rem;
+}
+:root[data-theme='light'] {
+  --sl-color-white: #263c36;
+  --sl-color-gray-1: #293833;
+  --sl-color-gray-2: #4b5650;
+  --sl-color-gray-3: #647168;
+  --sl-color-gray-4: #89948b;
+  --sl-color-gray-5: #b9bdb5;
+  --sl-color-gray-6: #e5e4dc;
+  --sl-color-gray-7: #f8f7f2;
+  --sl-color-black: #fcfbf7;
+  --sl-color-accent-low: #f1eee5;
+  --sl-color-accent: #8b543b;
+  --sl-color-accent-high: #754b39;
+  --sl-color-text: #293833;
+  --sl-color-text-accent: #8b543b;
+  --sl-color-text-invert: #fffefa;
+  --sl-color-bg: #fcfbf7;
+  --sl-color-bg-nav: #f8f7f2;
+  --sl-color-bg-sidebar: #f8f7f2;
+  --sl-color-bg-inline-code: #efeee8;
+  --sl-color-bg-accent: #8b543b;
+  --sl-color-hairline: #deddd4;
+  --sl-color-hairline-light: #deddd4;
+  --sl-color-hairline-shade: #deddd4;
+}
+:root[data-theme='dark'] {
+  --sl-color-white: #e7e8df;
+  --sl-color-gray-1: #d8ded5;
+  --sl-color-gray-2: #b2b9b2;
+  --sl-color-gray-3: #929e95;
+  --sl-color-gray-4: #77877b;
+  --sl-color-gray-5: #46534b;
+  --sl-color-gray-6: #303a34;
+  --sl-color-black: #202724;
+  --sl-color-accent-low: #423328;
+  --sl-color-accent: #d39a79;
+  --sl-color-accent-high: #f4d0b9;
+  --sl-color-text: #e7e8df;
+  --sl-color-text-accent: #d39a79;
+  --sl-color-text-invert: #202724;
+  --sl-color-bg: #252d29;
+  --sl-color-bg-nav: #202724;
+  --sl-color-bg-sidebar: #202724;
+  --sl-color-bg-inline-code: #303a34;
+  --sl-color-bg-accent: #d39a79;
+  --sl-color-hairline: #414a44;
+  --sl-color-hairline-light: #414a44;
+  --sl-color-hairline-shade: #414a44;
 }
 
 html { background: var(--mlh-bg); scroll-behavior: smooth; }
 body { color: var(--mlh-text); background: var(--mlh-bg); font-family: var(--mlh-font-body); }
-.header { min-height: 5.35rem; background: var(--mlh-bg); border-bottom: 1px solid var(--mlh-border); }
-.sidebar-pane, .right-sidebar { background: var(--mlh-sidebar); }
-.content-panel { background: var(--mlh-surface); }
+.header { background: var(--sl-color-bg-nav); border-bottom: 1px solid var(--sl-color-hairline); }
+.sidebar-pane { background: var(--sl-color-bg-sidebar); }
+.content-panel { background: var(--sl-color-bg); }
 .sl-markdown-content { font-size: 1.06rem; line-height: 1.85; }
-.sl-markdown-content h1, .sl-markdown-content h2, .sl-markdown-content h3 { color: var(--mlh-heading); letter-spacing: .015em; }
+.sl-markdown-content h1, .sl-markdown-content h2, .sl-markdown-content h3 { color: var(--sl-color-white); letter-spacing: .015em; }
 .sl-markdown-content h1 { font-size: clamp(2rem, 3vw, 2.85rem); line-height: 1.3; }
-.hero h1 { color: var(--mlh-heading) !important; }
-.hero .tagline { color: var(--mlh-muted) !important; }
+.hero h1 { color: var(--sl-color-white) !important; }
+.hero .tagline { color: var(--sl-color-gray-2) !important; }
 .sl-markdown-content a { color: var(--mlh-link); text-underline-offset: .18em; }
 .sl-markdown-content a:hover, .sidebar-content a:hover { background: var(--mlh-hover); }
-.sidebar-content a[aria-current="page"] { color: var(--mlh-active); font-weight: 700; background: var(--mlh-hover); }
+.sidebar-content a[aria-current="page"] { color: var(--sl-color-accent-high); font-weight: 700; background: var(--sl-color-accent-low); }
 .sl-markdown-content :is(table, pre) { border-color: var(--mlh-border); }
 .sl-markdown-content blockquote, .mlh-callout { border-inline-start: 3px solid var(--mlh-accent); background: var(--mlh-callout); padding: 1rem 1.25rem; }
 .mlh-keypoint { color: var(--mlh-error); font-weight: 700; }
@@ -41,7 +81,11 @@ body { color: var(--mlh-text); background: var(--mlh-bg); font-family: var(--mlh
 .mlh-table-scroll { overflow-x: auto; max-width: 100%; }
 .mlh-table-scroll:focus { outline: 2px solid var(--mlh-accent); outline-offset: 2px; }
 @media (max-width: 50rem) {
-  .header { min-height: 3.75rem; }
+  :root { --sl-nav-height: 3.8rem; }
   .sl-markdown-content { font-size: 1rem; line-height: 1.8; }
   .sl-markdown-content table { display: block; overflow-x: auto; }
 }
+
+/* Active and hover links remain readable against warm off-white backgrounds. */
+.sidebar-content a, .sidebar-content summary { overflow-wrap: break-word; }
+.sidebar-content a[aria-current='page']:hover { color: var(--sl-color-accent-high); }
