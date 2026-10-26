@@ -24,12 +24,13 @@ import '../styles/tools.css';
     <slot />
     <footer class="tool-footer">Medical Learning Hub · 個人醫學學習工具 · 教育用途</footer>
     <script>
-      const saved = localStorage.getItem('mlh-theme');
-      if (saved === 'dark') document.documentElement.dataset.theme = 'dark';
+      const saved = localStorage.getItem('starlight-theme');
+      if (saved === 'dark' || saved === 'light') document.documentElement.dataset.theme = saved;
+      else document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.querySelector('#theme-toggle').addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
         if (next === 'dark') document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
-        localStorage.setItem('mlh-theme', next);
+        localStorage.setItem('starlight-theme', next);
       });
     </script>
   </body>
