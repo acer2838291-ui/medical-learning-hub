@@ -14,7 +14,7 @@
 - PDF.js（列入依賴，閱讀器尚未完成）
 - Pages CMS（內容編輯設定草案）
 - Node.js test runner 的公式測試
-- 目標部署：Cloudflare Pages，透過 GitHub `main` 分支建置
+- 部署：GitHub Pages，透過 GitHub Actions 自動建置 `main` 分支
 
 ## 開發
 
@@ -45,7 +45,7 @@ Repository 預計公開，只放原創程式碼與取得公開授權的示範內
 
 ## CMS 與部署
 
-根目錄 `.pages.yml` 定義 Pages CMS 的內容集合草案；正式啟用需登入 Pages CMS 並授權它讀寫目標 GitHub Repository。部署目標 Cloudflare Pages 尚未連接。Astro 靜態站的 Build command 為 `npm run build`，輸出目錄為 `dist`；部署仍需實際完成連線、建置與網址驗收。
+根目錄 `.pages.yml` 定義 Pages CMS 的內容集合草案；正式啟用需登入 Pages CMS 並授權它讀寫目標 GitHub Repository。GitHub Pages 由 `.github/workflows/deploy-pages.yml` 自動建置並部署，輸出目錄為 `dist`。公開網址為 <https://acer2838291-ui.github.io/medical-learning-hub/>。
 
 ## 文件
 

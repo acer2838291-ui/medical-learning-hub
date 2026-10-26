@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-  site: 'https://medical-learning-hub.pages.dev',
+  site: 'https://acer2838291-ui.github.io',
+  base: '/medical-learning-hub',
   trailingSlash: 'always',
   integrations: [
     starlight({

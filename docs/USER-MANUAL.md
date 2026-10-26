@@ -24,7 +24,7 @@ Pages CMS 尚未完成登入授權；啟用後可從 CMS 集合新增或編輯�
 
 ## 更新與回復
 
-正式 GitHub Repository、CMS、Cloudflare Pages 尚未建立，因此目前無線上後台入口、預覽網址或 Commit 可回復。接通 GitHub 後，使用 `content/...` 分支改內容、`feature/...` 加功能、`fix/...` 修錯；由 Pull Request 檢查後再合併 `main`。Cloudflare Pages 會在 Git 整合完成後提供預覽部署與正式部署。
+GitHub Repository 已建立。GitHub Pages 會由 `.github/workflows/deploy-pages.yml` 自動建置並部署 `main` 分支；網站網址為 <https://acer2838291-ui.github.io/medical-learning-hub/>。Pages CMS 尚待登入授權。未來改內容可使用 `content/...` 分支，加功能用 `feature/...`，修錯用 `fix/...`；經 Pull Request 檢查後再合併 `main`。
 
 ## 求助 Codex/GPT
 
