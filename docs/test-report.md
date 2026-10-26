@@ -14,7 +14,7 @@
 | `npm create astro` 初始化 | RECOVERED | 初次初始化下載失敗；改在已建好的專案直接安裝依賴後恢復 |
 | Astro production build | PASS WITH WARNING | `npm run build` 成功產生 57 個頁面及 Pagefind 搜尋索引；`/404` 內容頁與 Starlight 404 路由有一則優先順序警告。環境另提示未知的 npm `http-proxy` 設定，均未阻止建置 |
 | GitHub Repository | BLOCKED | 已確認連接帳號為 `acer2838291-ui`，目前 repository list 為空；瀏覽器 GitHub 頁面要求登入，尚未建立 repo |
-| GitHub Pages 部署 | PASS | Cloudflare 未連接，因此改用 GitHub Pages；GitHub Actions 首次部署成功，公開首頁已開啟驗證，最新導覽前綴修正正在重新部署 |
+| GitHub Pages 部署 | PASS | Cloudflare 未連接，因此改用 GitHub Pages；GitHub Actions 建置與部署成功，首頁及醫學（三）頁已在線驗證，專案路徑導覽正常 |
 | Pages CMS | NOT STARTED | 設定檔已備妥；需登入及授權 GitHub App 後才能實測 |
 | PDF.js | NOT IMPLEMENTED | 已列入依賴規劃；未安裝、未實作 |
 | IndexedDB／私人內容 | NOT IMPLEMENTED | 尚未接入；禁止把個人筆記或 PDF 放入公開內容目錄 |
