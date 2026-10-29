@@ -19,3 +19,10 @@ personal-data/
 *.log
 .DS_Store
 Thumbs.db
+
+# Private research / source-audit workspaces: keep outside this public repository
+.research/
+.paper/
+research-private/
+.agent-toolkit-private/
+medical-agent-toolkit-private/

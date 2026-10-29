@@ -55,6 +55,16 @@ Repository 預計公開，只放原創程式碼與取得公開授權的示範內
 - [`AGENTS.md`](AGENTS.md)：未來 Codex/GPT 修改規則。
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)：分支與 Pull Request 規範。
 
+## Codex／Medical Agent Toolkit
+
+本 Repository 已整合可公開的專案級 Codex Skills，放在 `.agents/skills/`，用於醫學筆記、題庫、文獻證據檢查、網站維護與公開前安全審查。
+
+- 詳細流程：[Agent Toolkit 整合說明](docs/AGENT_TOOLKIT.md)
+- 筆記範本：[docs/templates/medical-note.template.mdx](docs/templates/medical-note.template.mdx)
+- 自編題資料範本：[docs/templates/questions.sample.json](docs/templates/questions.sample.json)
+
+**重要：** 私人 TriNetX LIVE SOP／Methodology 文件、原始 Advanced Analytics 報告、來源驗證台帳、個人教材與未發表研究不包含在公開 Repository。它們應保存在獨立私有工作區。自訂 `draft: true` 欄位不會讓已提交的檔案變成私人檔案。
+
 ## 授權
 
 程式碼以 MIT License 提供。第三方教材、題目、圖表與論文全文不因本程式碼授權而自動取得重製權。

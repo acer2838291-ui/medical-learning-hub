@@ -1,0 +1,18 @@
+[
+  {
+    "id": "sample-self-written-001",
+    "source_kind": "self_written",
+    "source_id": "original-demo",
+    "stem": "Hazard ratio (HR) 與 risk ratio (RR) 的關係，何者最正確？",
+    "options": {
+      "A": "兩者必然相等",
+      "B": "兩者衡量的統計量不同，不能直接互換",
+      "C": "HR 永遠大於 1",
+      "D": "RR 不必考慮研究族群"
+    },
+    "correct": "B",
+    "explanation": "HR 比較 hazard，RR 比較 risk；必須根據研究設計及追蹤定義解讀。",
+    "visibility": "private",
+    "source_verified": false
+  }
+]
