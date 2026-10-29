@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acer2838291-ui.github.io/medical-learning-hub/schemas/mindmap.schema.json",
+  "title": "Medical Learning Hub mind map",
+  "type": "object",
+  "required": ["id", "title", "kind", "nodes", "updatedAt"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "kind": { "enum": ["disease-overview", "pathophysiology-flow", "differential-diagnosis", "diagnostic-algorithm", "treatment-algorithm", "drug-mechanism"] },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "type"],
+        "properties": {
+          "id": { "type": "string" }, "conceptId": { "type": "string" }, "parentId": { "type": ["string", "null"] },
+          "label": { "type": "string" }, "detail": { "type": "string" },
+          "type": { "enum": ["topic", "cause", "mechanism", "manifestation", "diagnosis", "treatment", "reference", "custom"] },
+          "diseaseUrl": { "type": "string", "format": "uri-reference" }, "collapsed": { "type": "boolean" },
+          "source": { "type": "string" }, "verification": { "enum": ["source-checked", "bibliography-only", "ai-explanation", "unverified"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

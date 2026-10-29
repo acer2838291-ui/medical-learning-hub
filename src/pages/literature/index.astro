@@ -19,27 +19,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <ul id="paper-list" class="card-grid"></ul>
   </main>
   <script>
-    const key = 'mlh-literature-v1';
+    import { allRecords, saveRecord, deleteRecord } from '../../lib/personal-db';
     const list = document.querySelector('#paper-list');
-    const render = () => {
+    const render = async () => {
       list.replaceChildren();
-      const papers = JSON.parse(localStorage.getItem(key) || '[]');
+      const papers = await allRecords('literature');
       if (!papers.length) { list.innerHTML = '<li class="empty-state">目前沒有文獻。新增後會保存在這個瀏覽器。</li>'; return; }
       for (const paper of papers) {
         const item = document.createElement('li'); item.className = 'tool-card';
         const heading = document.createElement('h3'); heading.textContent = paper.title;
         const details = document.createElement('p'); details.textContent = [paper.authors, paper.doi && `DOI: ${paper.doi}`, paper.pmid && `PMID: ${paper.pmid}`, paper.status, paper.tags].filter(Boolean).join(' · ');
-        const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '移除'; remove.addEventListener('click', () => { save(papers.filter((p) => p.id !== paper.id)); });
+        const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '移除'; remove.addEventListener('click', async () => { await deleteRecord('literature', paper.id); await render(); });
         item.append(heading, details, remove); list.append(item);
       }
     };
-    const save = (papers) => { localStorage.setItem(key, JSON.stringify(papers)); render(); };
     document.querySelector('#paper-form').addEventListener('submit', (event) => {
       event.preventDefault(); const fields = Object.fromEntries(new FormData(event.currentTarget));
-      const papers = JSON.parse(localStorage.getItem(key) || '[]'); papers.unshift({ ...fields, id: crypto.randomUUID(), createdAt: new Date().toISOString() }); save(papers); event.currentTarget.reset();
+      saveRecord('literature', { ...fields, id: crypto.randomUUID(), createdAt: new Date().toISOString() }).then(() => { event.currentTarget.reset(); render(); });
     });
     document.querySelector('#export-papers').addEventListener('click', () => {
-      const blob = new Blob([localStorage.getItem(key) || '[]'], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'literature.json'; a.click(); URL.revokeObjectURL(a.href);
+      allRecords('literature').then((papers) => { const blob = new Blob([JSON.stringify(papers,null,2)], { type: 'application/json' }); const a = document.createElement('a'); const url = URL.createObjectURL(blob); a.href = url; a.download = 'literature.json'; a.click(); URL.revokeObjectURL(url); });
     });
     render();
   </script>

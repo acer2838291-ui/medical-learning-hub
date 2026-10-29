@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="疾病比較表" description="建立、編輯、保存與匯出個人疾病比較表。">
+  <main class="tool-page"><p class="eyebrow">MEDICAL COMPARISON WORKSPACE</p><h1>疾病比較表</h1>
+    <p>可比較 2–5 種疾病並自訂欄位。資訊欄預設留白；只有你加入且核對的來源，才可標記為已驗證。</p>
+    <div class="card-grid"><label>比較表名稱<input id="comparison-title" value="疾病鑑別比較" maxlength="160" /></label><label>篩選列<input id="row-filter" placeholder="搜尋欄位、特徵或來源" /></label></div>
+    <div id="disease-inputs" class="calculator-grid"></div>
+    <div class="card-grid"><button id="add-disease" type="button">新增疾病欄（最多 5 種）</button><button id="remove-disease" type="button">移除最後一種</button><button id="add-row" type="button">新增比較項目</button><button id="save-comparison" type="button">儲存比較表</button><button id="export-json" type="button">匯出 JSON</button><button id="export-md" type="button">匯出 Markdown</button><button id="export-csv" type="button">匯出 CSV</button><label>匯入 JSON<input id="comparison-import" type="file" accept="application/json,.json" /></label></div>
+    <div class="table-scroll"><table class="comparison-table" id="comparison-table" aria-label="可編輯疾病比較表"><thead></thead><tbody></tbody></table></div>
+    <h2>已儲存的比較表</h2><div id="saved-comparisons" class="card-grid"></div>
+    <div class="callout">每個比較資料儲存格都包含來源定位、核實狀態與鑑別力標記。無來源的敏感度、特異度、門檻值或治療建議維持空白；請勿將待核實內容當成臨床建議。</div><output id="comparison-status" aria-live="polite"></output>
+  </main>
+  <script>
+    import { allRecords, saveRecord, deleteRecord } from '../../lib/personal-db';
+    const state = { diseases: ['急性腎損傷（AKI）', '', ''], diseaseIds: ['disease.aki', '', ''], rows: [
+      { name: '定義', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+      { name: '病因與機轉', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+      { name: '臨床表現', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+      { name: '診斷方式／標準', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+      { name: '治療選擇', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+      { name: '併發症與預後', values: ['', '', ''], sources: ['', '', ''], verified: [false, false, false], key: [false, false, false] },
+    ] };
+    const status = document.querySelector('#comparison-status');
+    const inputs = document.querySelector('#disease-inputs');
+    const table = document.querySelector('#comparison-table');
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    function render() {
+      inputs.replaceChildren();
+      state.diseases.forEach((name, index) => { const label = document.createElement('label'); label.className = 'tool-card'; label.textContent = '疾病 ' + (index + 1); const input = document.createElement('input'); input.value = name; input.maxLength = 120; input.placeholder = '輸入疾病名稱'; input.dataset.disease = index; input.addEventListener('input', () => { state.diseases[index] = input.value; state.diseaseIds[index] = input.value.trim() === '急性腎損傷（AKI）' ? 'disease.aki' : ''; renderTable(); }); label.append(input); inputs.append(label); });
+      renderTable();
+    }
+    function renderTable() {
+      table.tHead.innerHTML = '<tr><th>比較項目</th>' + state.diseases.map((name, i) => '<th>' + esc(name || ('疾病 ' + (i + 1))) + '</th>').join('') + '</tr>';
+      table.tBodies[0].innerHTML = state.rows.map((row, rowIndex) => '<tr data-row="' + rowIndex + '"><th><input aria-label="比較項目名稱" data-name="' + rowIndex + '" value="' + esc(row.name) + '"><button type="button" data-remove-row="' + rowIndex + '" aria-label="刪除比較項目">刪除列</button></th>' + state.diseases.map((_, col) => '<td><textarea data-value="' + rowIndex + ':' + col + '" rows="3" placeholder="待填；加入來源後再核實">' + esc(row.values[col]) + '</textarea><label class="compact-label"><input type="checkbox" data-verified="' + rowIndex + ':' + col + '" ' + (row.verified[col] ? 'checked' : '') + '>來源已核對</label><label class="compact-label"><input type="checkbox" data-key="' + rowIndex + ':' + col + '" ' + (row.key[col] ? 'checked' : '') + '>鑑別力特徵</label><input data-source="' + rowIndex + ':' + col + '" placeholder="來源 URL／DOI／PMID／頁碼" value="' + esc(row.sources[col]) + '"></td>').join('') + '</tr>').join('');
+      table.querySelectorAll('[data-name]').forEach((el) => el.addEventListener('input', () => { state.rows[Number(el.dataset.name)].name = el.value; }));
+      table.querySelectorAll('[data-value]').forEach((el) => el.addEventListener('input', () => { const [r,c] = el.dataset.value.split(':').map(Number); state.rows[r].values[c] = el.value; }));
+      table.querySelectorAll('[data-source]').forEach((el) => el.addEventListener('input', () => { const [r,c] = el.dataset.source.split(':').map(Number); state.rows[r].sources[c] = el.value; }));
+      table.querySelectorAll('[data-verified]').forEach((el) => el.addEventListener('change', () => { const [r,c] = el.dataset.verified.split(':').map(Number); state.rows[r].verified[c] = el.checked; }));
+      table.querySelectorAll('[data-key]').forEach((el) => el.addEventListener('change', () => { const [r,c] = el.dataset.key.split(':').map(Number); state.rows[r].key[c] = el.checked; }));
+      table.querySelectorAll('[data-remove-row]').forEach((el) => el.addEventListener('click', () => { state.rows.splice(Number(el.dataset.removeRow), 1); renderTable(); }));
+    }
+    document.querySelector('#add-disease').addEventListener('click', () => { if (state.diseases.length >= 5) return; state.diseases.push(''); state.diseaseIds.push(''); state.rows.forEach((row) => { row.values.push(''); row.sources.push(''); row.verified.push(false); row.key.push(false); }); render(); });
+    document.querySelector('#remove-disease').addEventListener('click', () => { if (state.diseases.length <= 2) return; state.diseases.pop(); state.diseaseIds.pop(); state.rows.forEach((row) => { row.values.pop(); row.sources.pop(); row.verified.pop(); row.key.pop(); }); render(); });
+    document.querySelector('#add-row').addEventListener('click', () => { const n = state.diseases.length; state.rows.push({ name: '新比較項目', values: Array(n).fill(''), sources: Array(n).fill(''), verified: Array(n).fill(false), key: Array(n).fill(false) }); renderTable(); });
+    document.querySelector('#row-filter').addEventListener('input', (event) => { const q = event.currentTarget.value.toLowerCase(); table.querySelectorAll('tbody tr').forEach((tr) => { tr.hidden = !!q && !tr.textContent.toLowerCase().includes(q); }); });
+    function getData() { return { title: document.querySelector('#comparison-title').value, diseases: state.diseases, diseaseIds: state.diseaseIds, rows: state.rows, updatedAt: new Date().toISOString() }; }
+    document.querySelector('#save-comparison').addEventListener('click', async () => { const data = getData(); data.id = crypto.randomUUID(); await saveRecord('comparisons', data); status.textContent = '比較表已保存到本機。'; renderSaved(); });
+    function matrix() { const data = getData(); return [['比較項目', ...data.diseases], ...data.rows.map((row) => [row.name, ...data.diseases.map((_, i) => row.values[i] + (row.key[i] ? ' [鑑別力特徵]' : '') + (row.verified[i] ? ' [已核對]' : ' [待核實]') + (row.sources[i] ? ' (' + row.sources[i] + ')' : ''))])]; }
+    function download(text, name, type) { const a = document.createElement('a'); const url = URL.createObjectURL(new Blob([text], { type })); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url); }
+    document.querySelector('#export-csv').addEventListener('click', () => download(matrix().map((row) => row.map((value) => '"' + String(value).replaceAll('"', '""') + '"').join(',')).join('\r\n'), 'medical-comparison.csv', 'text/csv'));
+    document.querySelector('#export-md').addEventListener('click', () => { const data = matrix(); download('| ' + data[0].join(' | ') + ' |\n| ' + data[0].map(() => '---').join(' | ') + ' |\n' + data.slice(1).map((row) => '| ' + row.join(' | ') + ' |').join('\n'), 'medical-comparison.md', 'text/markdown'); });
+    document.querySelector('#export-json').addEventListener('click', () => download(JSON.stringify(getData(), null, 2), 'medical-comparison.json', 'application/json'));
+    document.querySelector('#comparison-import').addEventListener('change', async (event) => { try { const file = event.currentTarget.files[0]; if (!file) return; const data = JSON.parse(await file.text()); if (!Array.isArray(data.diseases) || data.diseases.length < 2 || data.diseases.length > 5 || !Array.isArray(data.rows) || data.rows.some((row) => !row || typeof row.name !== 'string' || !Array.isArray(row.values) || !Array.isArray(row.sources) || !Array.isArray(row.verified) || !Array.isArray(row.key) || row.values.length !== data.diseases.length || row.sources.length !== data.diseases.length)) throw new Error('格式不正確：疾病數須為 2–5，且每列資料欄數一致。'); document.querySelector('#comparison-title').value = String(data.title || '匯入的比較表'); state.diseases = data.diseases.map(String); state.diseaseIds = Array.isArray(data.diseaseIds) ? data.diseaseIds : data.diseases.map((name) => name === '急性腎損傷（AKI）' ? 'disease.aki' : ''); state.rows = data.rows; render(); status.textContent = '比較表 JSON 已匯入；請按「儲存比較表」保存到本機。'; } catch (error) { status.textContent = '匯入失敗：' + error.message; } });
+    async function renderSaved() { const rows = await allRecords('comparisons'); const container = document.querySelector('#saved-comparisons'); container.replaceChildren(); if (!rows.length) { container.innerHTML = '<p class="empty-state">尚無已保存比較表。</p>'; return; } for (const item of rows) { const card = document.createElement('article'); card.className = 'tool-card'; card.innerHTML = '<h3>' + esc(item.title) + '</h3><p>' + esc((item.diseases || []).join(' · ')) + '</p><button type="button" data-open="' + esc(item.id) + '">載入</button> <button type="button" data-delete="' + esc(item.id) + '">刪除</button>'; container.append(card); } container.querySelectorAll('[data-open]').forEach((button) => button.addEventListener('click', async () => { const item = (await allRecords('comparisons')).find((row) => row.id === button.dataset.open); document.querySelector('#comparison-title').value = item.title; state.diseases = item.diseases; state.diseaseIds = item.diseaseIds || item.diseases.map((name) => name === '急性腎損傷（AKI）' ? 'disease.aki' : ''); state.rows = item.rows; render(); status.textContent = '已載入保存的比較表。按「儲存比較表」會另存一個版本。'; })); container.querySelectorAll('[data-delete]').forEach((button) => button.addEventListener('click', async () => { await deleteRecord('comparisons', button.dataset.delete); renderSaved(); })); }
+    render(); renderSaved();
+  </script>
+</BaseLayout>

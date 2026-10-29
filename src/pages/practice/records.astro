@@ -1,24 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="答題紀錄" description="目前瀏覽器中的示範作答紀錄。">
+<BaseLayout title="答題紀錄" description="查看本機 IndexedDB 中的示範作答紀錄。">
   <main class="tool-page"><p class="eyebrow">LOCAL RECORDS</p><h1>答題紀錄</h1>
-    <p>紀錄只存在此瀏覽器的 localStorage。清除瀏覽資料會移除紀錄；匯出備份功能尚未完成。</p>
-    <button id="export-records" type="button">匯出 JSON</button><button id="clear-records" type="button">清除此機紀錄</button>
-    <ol id="record-list"></ol>
+    <p>紀錄存在目前瀏覽器的 IndexedDB。換電腦或清除網站資料可能遺失；可另行使用整體工作區 JSON 備份。</p>
+    <button id="export-records" type="button">匯出此紀錄 JSON</button><button id="clear-records" type="button">清除此機紀錄</button>
+    <ol id="record-list"></ol><output id="records-status" aria-live="polite"></output>
   </main>
   <script>
-    const key = 'mlh-demo-answers';
-    const render = () => {
+    import { allRecords, clearStore } from '../../lib/personal-db';
+    const render = async () => {
       const list = document.querySelector('#record-list');
-      const records = JSON.parse(localStorage.getItem(key) || '[]');
-      list.innerHTML = records.length ? records.map((r) => `<li>${r.id}｜${r.correct ? '答對' : '答錯'}｜${new Date(r.answeredAt).toLocaleString()}</li>`).join('') : '<li>目前沒有示範作答紀錄。</li>';
+      const records = await allRecords('practice');
+      records.sort((a,b) => new Date(b.answeredAt).getTime() - new Date(a.answeredAt).getTime());
+      list.replaceChildren();
+      if (!records.length) { list.innerHTML = '<li>目前沒有示範作答紀錄。</li>'; return records; }
+      records.forEach((record) => { const item = document.createElement('li'); item.textContent = (record.questionId || record.id) + '｜' + (record.correct ? '答對' : '答錯') + '｜' + new Date(record.answeredAt).toLocaleString(); list.append(item); });
+      return records;
     };
+    document.querySelector('#export-records').addEventListener('click', async () => { const records = await allRecords('practice'); const link = document.createElement('a'); const url = URL.createObjectURL(new Blob([JSON.stringify(records,null,2)], { type: 'application/json' })); link.href = url; link.download = 'medical-learning-hub-answers.json'; link.click(); URL.revokeObjectURL(url); });
+    document.querySelector('#clear-records').addEventListener('click', async () => { await clearStore('practice'); document.querySelector('#records-status').textContent = '此機作答紀錄已清除。'; await render(); });
     render();
-    document.querySelector('#export-records').addEventListener('click', () => {
-      const blob = new Blob([localStorage.getItem(key) || '[]'], { type: 'application/json' });
-      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'medical-learning-hub-answers.json'; link.click(); URL.revokeObjectURL(link.href);
-    });
-    document.querySelector('#clear-records').addEventListener('click', () => { localStorage.removeItem(key); render(); });
   </script>
 </BaseLayout>

@@ -1,35 +1,34 @@
 ---
 title: Medical Learning Hub
-description: 臺灣醫師國考第二階段的個人醫學圖書館。
+description: Medical Learning Hub — Personal Medical Knowledge & Learning Workspace。
 template: splash
 hero:
-  tagline: 把醫學筆記、文獻與練習放進同一個學習空間。
+  tagline: Read · Understand · Connect · Review｜從教科書、疾病機轉到文獻與國考複習。
   actions:
-    - text: 瀏覽醫學筆記
-      link: ./medicine-3/
+    - text: 進入醫學知識庫
+      link: ./knowledge/
       icon: right-arrow
-    - text: 開始練習
-      link: ./practice/
+    - text: 管理我的教科書
+      link: ./textbooks/
       variant: minimal
 ---
 
-## 依考科整理
+## Read · Understand · Connect · Review
 
-以醫師第二階段的醫學（三）至醫學（六）為最高層分類，並依專科與主題整理。尚未新增公開教材的分類會顯示空狀態。
+這是個人醫學知識與學習工作空間。你可以依疾病、系統、專科與機轉整理知識，管理教科書章節進度、建立比較表與心智圖，也可以閱讀文獻、使用醫學工具及準備國考。
 
-| 考科 | 範圍 | 入口 |
+## 主要工作台
+
+| 學習任務 | 入口 | 用途 |
 |---|---|---|
-| 醫學（三） | 內科、家庭醫學科 | [瀏覽分類](./medicine-3/) |
-| 醫學（四） | 小兒、皮膚、神經、精神 | [瀏覽分類](./medicine-4/) |
-| 醫學（五） | 外科、骨科、泌尿科 | [瀏覽分類](./medicine-5/) |
-| 醫學（六） | 麻醉、眼、耳鼻喉、婦產、復健 | [瀏覽分類](./medicine-6/) |
+| 醫學知識庫 | [依系統、專科、疾病、症狀與機轉瀏覽](./knowledge/) · [疾病示範：急性腎損傷](./knowledge/aki/) | 查看知識分類索引、結構化疾病說明、機轉、診斷與來源 |
+| 原文書學習 | [我的教科書](./textbooks/) | 新增書目、版本、章節與閱讀進度 |
+| 疾病比較 | [建立比較表](./comparisons/) | 比較 2–5 個疾病，編輯欄位並匯出 |
+| 心智圖 | [開啟互動心智圖](./mindmaps/) | 編輯、展開、搜尋、儲存及匯出節點 |
+| 文獻與指引 | [我的文獻庫](./literature/) | 整理書目、PICO 與證據閱讀 |
+| 醫學工具 | [計算器](./calculators/) · [表格編輯器](./tables/) | 使用既有工具並管理本機資料 |
+| 國考與測驗 | [醫學（三）](./medicine-3/) · [醫學（四）](./medicine-4/) · [醫學（五）](./medicine-5/) · [醫學（六）](./medicine-6/) · [練習題](./practice/) | 保留既有第二階段考科索引與練習模式 |
 
-## 學習工具
+## 個人資料與內容權限
 
-- [文獻閱讀與 PICO 筆記](./literature/)
-- [國考練習、錯題本與答題紀錄](./practice/)
-- [醫學計算器](./calculators/)
-- [疾病、鑑別診斷與藥物比較表](./tables/)
-- [我的收藏](./saved/)
-
-> 個人筆記、未授權教材、私人 PDF 與答題紀錄不可提交到公開 Repository。公開網站中的示範內容僅用於展示版型。
+教科書紀錄、章節進度、個人筆記、比較表及心智圖只存在目前瀏覽器的 IndexedDB，不會自動傳送到外部 AI API。它不是雲端備份：換電腦、清除網站資料或使用共用裝置都可能造成遺失，請定期在[個人資料匯入／匯出](./workspace/)建立自己的 JSON 備份。公開網站只收錄附有可核對來源的示範內容；AccessMedicine 等受限平台只保存使用者自行新增的書目與官方連結，不抓取全文。

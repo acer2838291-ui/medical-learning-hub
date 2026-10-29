@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Medical Learning Hub knowledge card",
+  "type": "object",
+  "required": ["conceptId", "title", "sections", "references", "updatedAt"],
+  "properties": {
+    "conceptId": { "type": "string", "pattern": "^[a-z][a-z0-9.-]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "systems": { "type": "array", "items": { "type": "string" } },
+    "specialties": { "type": "array", "items": { "type": "string" } },
+    "diseases": { "type": "array", "items": { "type": "string" } },
+    "symptoms": { "type": "array", "items": { "type": "string" } },
+    "mechanisms": { "type": "array", "items": { "type": "string" } },
+    "drugs": { "type": "array", "items": { "type": "string" } },
+    "sections": { "type": "object", "additionalProperties": { "$ref": "#/$defs/claim" } },
+    "references": { "type": "array", "items": { "$ref": "#/$defs/reference" } },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "claim": { "type": "object", "required": ["text", "verification"], "properties": { "text": { "type": "string" }, "verification": { "enum": ["source-checked", "bibliography-only", "ai-explanation", "unverified"] }, "sourceIds": { "type": "array", "items": { "type": "string" } } } },
+    "reference": { "type": "object", "required": ["id", "sourceType", "title", "verification", "permission"], "properties": { "id": { "type": "string" }, "sourceType": { "type": "string" }, "title": { "type": "string" }, "editionOrYear": { "type": "string" }, "chapterSectionPage": { "type": "string" }, "url": { "type": "string", "format": "uri" }, "doi": { "type": "string" }, "pmid": { "type": "string" }, "lastChecked": { "type": "string", "format": "date" }, "verification": { "enum": ["source-checked", "reported-only", "bibliography-only", "unverified"] }, "permission": { "type": "string" } } }
+  }
+}

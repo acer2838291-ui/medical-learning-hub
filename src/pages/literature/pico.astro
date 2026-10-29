@@ -3,14 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="PICO 筆記" description="在目前瀏覽器建立 PICO 閱讀摘要。">
   <main class="tool-page"><p class="eyebrow">PICO NOTES</p><h1>PICO 筆記</h1>
-    <p>草稿只存在目前瀏覽器；此原型不會上傳研究或患者資料。</p>
+    <p>草稿只存在目前瀏覽器的 IndexedDB；此原型不會上傳研究或患者資料。</p>
     <form id="pico-form" class="tool-card">
       <label>文獻標題<input name="title" required /></label><label>Population<input name="population" /></label><label>Intervention<input name="intervention" /></label><label>Comparator<input name="comparator" /></label><label>Outcome<input name="outcome" /></label><label>研究設計與備註<textarea name="notes" rows="5"></textarea></label><button>儲存 PICO 草稿</button>
     </form><output id="pico-status" aria-live="polite"></output>
   </main>
   <script>
-    const form = document.querySelector('#pico-form'); const key = 'mlh-pico-draft-v1';
-    const draft = JSON.parse(localStorage.getItem(key) || 'null'); if (draft) for (const [name, value] of Object.entries(draft)) if (form.elements[name]) form.elements[name].value = value;
-    form.addEventListener('submit', (event) => { event.preventDefault(); localStorage.setItem(key, JSON.stringify(Object.fromEntries(new FormData(form)))); document.querySelector('#pico-status').textContent = '已儲存在此瀏覽器。'; });
+    import { allRecords, saveRecord } from '../../lib/personal-db';
+    const form = document.querySelector('#pico-form');
+    allRecords('pico').then((items) => { const draft = items.find((item) => item.id === 'legacy-pico' || item.id === 'pico-draft'); if (draft) for (const [name, value] of Object.entries(draft)) if (form.elements[name]) form.elements[name].value = value; });
+    form.addEventListener('submit', async (event) => { event.preventDefault(); await saveRecord('pico', { id: 'pico-draft', ...Object.fromEntries(new FormData(form)) }); document.querySelector('#pico-status').textContent = '已儲存在目前瀏覽器。'; });
   </script>
 </BaseLayout>

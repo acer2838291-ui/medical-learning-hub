@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="醫學知識庫" description="依系統、專科、疾病、症狀、機轉與藥物連結個人醫學知識。">
+  <main class="tool-page knowledge-index">
+    <p class="eyebrow">MEDICAL KNOWLEDGE · SYSTEMS · DISEASES</p>
+    <h1>醫學知識庫</h1>
+    <p>以可重複引用的醫學概念建立知識卡，依系統、專科、疾病、症狀、機轉和藥物連結。國考考科只是其中一種索引；以下公開示範條目不依考科作為唯一分類。</p>
+    <section class="card-grid" aria-label="知識庫分類">
+      <article class="tool-card"><h2>依系統 Systems</h2><h3>腎臟與泌尿系統</h3><p><a href={`${import.meta.env.BASE_URL}knowledge/aki/`}>急性腎損傷（AKI）</a></p></article>
+      <article class="tool-card"><h2>依專科 Specialties</h2><h3>腎臟科 Nephrology</h3><p>AKI 是跨腎臟科、重症與一般內科照護的臨床症候群。</p><p><a href={`${import.meta.env.BASE_URL}medicine-3/nephrology/`}>既有醫學（三）腎臟科筆記</a></p></article>
+      <article class="tool-card"><h2>依疾病 Diseases</h2><p><a href={`${import.meta.env.BASE_URL}knowledge/aki/`}>Acute Kidney Injury（AKI，急性腎損傷）</a></p></article>
+      <article class="tool-card"><h2>依症狀 Symptoms</h2><p>可從 AKI 條目查閱尿量變化與腎功能指標；症狀／徵象獨立索引尚待整理有來源的條目。</p></article>
+      <article class="tool-card"><h2>依機轉 Mechanisms</h2><p><a href={`${import.meta.env.BASE_URL}knowledge/aki/#pathophysiology`}>腎灌流不足、腎實質傷害與尿路阻塞</a></p></article>
+      <article class="tool-card"><h2>依藥物 Pharmacology</h2><p>藥物索引待加入已核對來源的藥物卡片；目前不預填劑量或治療建議。</p></article>
+    </section>
+    <p class="callout">資料缺口會明確標示待查證，不以空白欄位推測結論。來源與內容處理權限可追蹤於疾病卡，請查看 <a href={`${import.meta.env.BASE_URL}knowledge/aki/`}>AKI 示範頁</a>。</p>
+  </main>
+</BaseLayout>

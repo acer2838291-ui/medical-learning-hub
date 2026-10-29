@@ -1,27 +1,26 @@
 # 專案協作規則
 
-1. 新增筆記前先搜尋既有文章，優先更新既有內容，避免重複建立。
-2. 保留教材原文與正式醫學英文專有名詞；翻譯要自然且準確。
-3. 不捏造教材中的數字、年份、考點、論文結果或參考文獻。
-4. 清楚區分投影片原文、翻譯、編輯整理與 AI 推論。
-5. 可依需求以粗體及設計系統指定顏色標示考點。
-6. 不修改使用者未要求修改的文章或設定。
-7. 不把 AI 推論冒充文獻原文或把自編題冒充正式國考歷屆試題。
-8. 新增計算器須附公式來源、單位、適用範圍、輸入驗證及測試。
-9. 修改後執行 `npm run build`；計算邏輯修改時執行 `npm test`。
-10. 檢查內部連結、頁面水平溢出及手機版閱讀。
-11. 保留本專案的低飽和暖米白、深綠灰與陶土色設計 token。
-12. 未被要求時不更換框架、不重寫整站。
-13. 不將患者資料、私人筆記、私人 PDF、API 金鑰或個人紀錄提交到公開 Repository。
-14. 更新完成後回報修改檔案、Commit、預覽網址、部署狀態及未完成項目。
-15. 任何醫學內容若來源或授權不清楚，先以私有內容處理，並在公開前取得公開授權。
+1. 將網站定位為個人醫學知識與學習工作區；醫學（三）至（六）保留為國考模式入口，不要求其他疾病知識硬套考科。
+2. 新增筆記前先搜尋既有文章，優先更新既有內容，避免重複建立。
+3. 保留正式醫學英文專有名詞；翻譯使用臺灣繁體中文。縮寫第一次出現須附英文全名。
+4. 不捏造來源中的數字、年份、考點、論文結果、版本、章節目錄或參考文獻。缺少資訊要標成缺乏資料或待驗證。
+5. 清楚區分原始來源內容、中文整理、AI 機轉解釋與未驗證資訊。重要主張記錄來源類型、版本／年份、章節／頁碼、URL／DOI／PMID、查核日期、驗證狀態與授權。
+6. 不修改使用者未要求修改的醫學文章或網站設定；拓展網站時沿用 Astro + Starlight 與低飽和暖米白、深綠灰、陶土色設計 token。
+7. 不把 AI 推論冒充來源，不把自編題冒充正式國考歷屆試題。
+8. 新增計算器須附公式來源、單位、適用範圍、輸入驗證及測試；劑量、診斷標準、治療建議須標日期、族群與原始來源。
+9. 個人書目、章節進度、私有筆記、答題紀錄、比較表和心智圖存於瀏覽器 IndexedDB 或私有端；不得送到外部 AI API。IndexedDB 不是雲端備份或安全資料庫，需提供匯出備份。
+10. 公開 Repository 不得包含患者資料、私人研究文件、私人 PDF、帳密、API 金鑰、未授權教科書全文／翻譯或個人答題紀錄。`draft: true` 不代表私有。
+11. AccessMedicine 等訂閱平台先檢查服務條款和適用機構合約。McGraw Hill 條款未明確允許外部 AI agent、AI-enabled browser、抓取或向外部 AI 傳送內容前，只能管理書目與官方連結；不得進入受限全文、爬取、批次下載、截圖擷取或產生全文翻譯。機構合約不明就標示「合約內容待確認」。
+12. 只有授權明確的開放資料、使用者原創內容或符合書面授權的內容才可處理和公開；授權狀態不明就不要將內容放進公開追蹤檔。
+13. 修改後依需求執行 `npm test`、`npm run build`，檢查新增路由、內部連結、水平溢出與手機版閱讀；只回報實際跑過的驗證。
+14. 未被要求時不更換框架、不重寫整站。
+15. 更新完成後回報修改檔案、Commit、PR、測試、Pages 部署、來源／授權及未完成項目。提交不等於建置成功，建置不等於已部署。
 
+## Agent Toolkit：公開網站專用整合
 
-## Agent Toolkit v1.2：公開網站專用整合
-
-- 本專案的 Codex Skills 位於 `.agents/skills/`，依任務選用：`medical-hub-maintainer`、`medical-slide-notes`、`exam-question-builder`、`literature-evidence-audit`、`publication-safety-review`。
-- 修改內容或準備公開前，先閱讀 `docs/AGENT_TOOLKIT.md`，核對來源、授權及是否含私人資料。
-- `draft: true` 是 `src/content.config.ts` 的自訂 metadata，**不是存取控制或保密措施**；不可將未授權教材、私人筆記、研究報告或任何敏感檔案放入 `src/content/docs/`、`public/` 或提交到公開 Git。
-- TriNetX LIVE SOP、TriNetX Methodology 以及 Medical Agent Toolkit v1.2 的私有研究模組保留在 repo 外的本機私有工作區；不可直接複製至本專案。方法學檢查不能冒充 LIVE 驗證。
-- 只有查過原始來源或已提供材料的數據才可標示已驗證；把 `unverified` 與 `source_checked` 分開，禁止以歷史版本數據覆蓋新版本。
-- 新增可公開內容時優先使用 `docs/templates/` 作為離線範本；獲得公開權限並核對完成後才移入網站內容目錄。
+- Codex Skills 位於 `.agents/skills/`，依任務選用：`medical-hub-maintainer`、`medical-textbook-study`、`medical-chapter-explainer`、`medical-knowledge-organizer`、`medical-comparison-table`、`medical-mindmap-builder`、`medical-source-verifier`、`medical-slide-notes`、`exam-question-builder`、`literature-evidence-audit`、`publication-safety-review`。
+- 修改內容或準備公開前，先閱讀 `docs/AGENT_TOOLKIT.md` 和適用 Skill，核對來源、授權及是否含私人資料。
+- `draft: true` 是自訂 metadata，不是存取控制；未授權教材、私人筆記、研究報告或敏感資料不可放入公開追蹤路徑。
+- AccessMedicine / McGraw Hill：若適用授權未明確允許外部 AI agent 與內容處理，只能處理書目、官方連結、公開授權來源及原創內容。不要進入受限全文或將內容交給外部 AI。學校帳號不等於 AI 使用授權。
+- 只有查過原始來源或已提供材料的主張才標記為 `source_checked`；區分 `reported_only`、`unverified` 與歷史版本。方法學指引不能冒充 LIVE 驗證。
+- 個人學習資料應留在本機 IndexedDB 或其他私有儲存位置，並提供使用者控制的匯出備份。
