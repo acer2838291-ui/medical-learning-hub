@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="個人資料匯入與匯出" description="備份或還原本機醫學學習資料。">
+  <main class="tool-page"><p class="eyebrow">PRIVATE LOCAL WORKSPACE</p><h1>個人資料匯入／匯出</h1>
+    <p>匯出書目、章節、個人筆記、心智圖、比較表與文獻書目成為 JSON 備份，或從既有備份匯入。匯入會以相同 ID 更新資料，並保留其他不同 ID 的紀錄。</p>
+    <div class="callout"><strong>儲存位置與限制：</strong>資料只保存在目前瀏覽器的 IndexedDB，不會自動傳送給外部 AI。IndexedDB 不是雲端資料庫，也不應存患者資料、帳密或機構機密。換電腦、清除網站資料、瀏覽器故障及共用裝置可能造成遺失或暴露；備份檔本身未加密，請存放在你控制且安全的位置。</div>
+    <div class="card-grid"><article class="tool-card"><h2>建立備份</h2><p>下載可再次匯入的版本化 JSON 檔。</p><button id="export-all" type="button">匯出全部個人資料</button></article><article class="tool-card"><h2>還原資料</h2><label>選擇 JSON 備份<input id="import-file" type="file" accept="application/json,.json" /></label><button id="import-all" type="button">匯入備份</button></article></div>
+    <output id="backup-status" aria-live="polite"></output>
+  </main>
+  <script>
+    import { exportWorkspace, importWorkspace } from '../lib/personal-db';
+    const output = document.querySelector('#backup-status');
+    document.querySelector('#export-all').addEventListener('click', async () => { try { const json = await exportWorkspace(); const url = URL.createObjectURL(new Blob([json], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = 'medical-learning-hub-backup.json'; link.click(); URL.revokeObjectURL(url); output.textContent = '備份已產生。請妥善保存檔案。'; } catch (error) { output.textContent = '匯出失敗：' + error.message; } });
+    document.querySelector('#import-all').addEventListener('click', async () => { const file = document.querySelector('#import-file').files[0]; if (!file) { output.textContent = '請先選擇備份檔。'; return; } try { await importWorkspace(await file.text()); output.textContent = '匯入完成。現有資料已依 ID 合併或更新。'; } catch (error) { output.textContent = '匯入失敗：' + error.message; } });
+  </script>
+</BaseLayout>

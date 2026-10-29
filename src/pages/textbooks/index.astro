@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="我的教科書" description="管理教科書書目、章節索引與個人學習進度。">
+  <main class="tool-page">
+    <p class="eyebrow">TEXTBOOK WORKSPACE</p><h1>我的教科書</h1>
+    <p>書目與自編學習筆記保存在這個瀏覽器的 IndexedDB。AccessMedicine 等平台可記錄書目和官方連結；未取得處理授權前，不擷取或貼入受限全文。</p>
+    <div class="callout"><strong>候選書目類型：</strong>Harrison's Principles of Internal Medicine、Current Medical Diagnosis &amp; Treatment、Schwartz's Principles of Surgery、Williams Obstetrics、Goodman &amp; Gilman's The Pharmacological Basis of Therapeutics，以及其他專科教科書。這些名稱是空白索引建議，並非訂閱或授權證明；版本、書目與權限請依你實際可查證的資料新增。</div>
+    <section class="card-grid">
+      <form id="book-form" class="tool-card">
+        <h2>新增教科書</h2>
+        <label>書名<input name="title" required maxlength="240" /></label>
+        <label>作者／編者<input name="authors" maxlength="240" /></label>
+        <div class="card-grid"><label>出版社<input name="publisher" maxlength="160" /></label><label>Edition<input name="edition" maxlength="80" /></label></div>
+        <div class="card-grid"><label>出版年<input name="year" inputmode="numeric" maxlength="4" /></label><label>ISBN<input name="isbn" maxlength="30" /></label></div>
+        <label>官方書籍／章節連結<input name="url" type="url" placeholder="https://" /></label>
+        <div class="card-grid"><label>資料來源平台<input name="platform" placeholder="例如出版社、AccessMedicine" /></label><label>語言<input name="language" value="English" /></label></div>
+        <label>所屬專科<input name="specialty" placeholder="例如內科、腎臟科" /></label>
+        <label>授權狀態<select name="permission"><option value="unverified">未確認</option><option value="bibliography-only">僅書目／連結</option><option value="personal-notes">允許個人筆記（自行確認）</option><option value="written-ai-permission">有書面 AI 處理授權（需自行留存授權）</option></select></label>
+        <label>可用的內容處理權限<textarea name="rights" rows="2" placeholder="記錄實際授權範圍；不確定時保留空白。"></textarea></label>
+        <label>閱讀進度 <span id="book-progress-label">0%</span><input name="progress" type="range" min="0" max="100" value="0" /></label>
+        <button type="submit">加入書目</button><button type="button" id="cancel-book-edit" hidden>取消編輯</button>
+      </form>
+      <form id="chapter-form" class="tool-card">
+        <h2>新增章節索引與筆記</h2>
+        <label>所屬書籍<select name="bookId" id="chapter-book" required><option value="">先新增或選擇書籍</option></select></label>
+        <label>章節標題<input name="title" required maxlength="240" /></label>
+        <label>Edition<input name="edition" maxlength="80" /></label>
+        <label>章節官方連結<input name="url" type="url" placeholder="https://" /></label>
+        <label>專科<input name="specialty" maxlength="100" /></label>
+        <label>相關疾病<input name="diseases" placeholder="以逗號分隔；僅作個人索引" /></label>
+        <label>學習狀態<select name="status"><option>待讀</option><option>閱讀中</option><option>已完成</option><option>需複習</option></select></label>
+        <label>個人中文筆記<textarea name="notes" rows="4" placeholder="只寫原創筆記或你有權處理的內容。"></textarea></label>
+        <label>Key Concepts<textarea name="concepts" rows="2"></textarea></label>
+        <label>References<textarea name="references" rows="2" placeholder="URL、DOI、PMID 或書籍定位"></textarea></label>
+        <label>內容處理狀態<select name="contentStatus"><option>未確認：只存書目與連結</option><option>原創筆記</option><option>公開授權來源已核對</option><option>書面授權已核對</option></select></label>
+        <button type="submit">加入章節</button><button type="button" id="cancel-chapter-edit" hidden>取消編輯</button>
+      </form>
+    </section>
+    <h2>書目與章節</h2><div id="book-list" class="calculator-grid"></div>
+    <p class="callout">本機資料限制：換電腦、清除網站資料、瀏覽器故障或使用共用裝置都可能讓資料遺失；請在<a href={`${import.meta.env.BASE_URL}workspace/`}>個人資料匯入／匯出</a>定期建立備份。IndexedDB 是瀏覽器本機儲存，不是安全雲端資料庫。</p>
+    <output id="textbook-status" aria-live="polite"></output>
+  </main>
+  <script>
+    import { allRecords, saveRecord, deleteRecord } from '../../lib/personal-db';
+    const bookForm = document.querySelector('#book-form');
+    const chapterForm = document.querySelector('#chapter-form');
+    const bookList = document.querySelector('#book-list');
+    const bookSelect = document.querySelector('#chapter-book');
+    const status = document.querySelector('#textbook-status');
+    let editingBookId = null;
+    let editingChapterId = null;
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    async function render() {
+      const [books, chapters] = await Promise.all([allRecords('books'), allRecords('chapters')]);
+      bookSelect.innerHTML = '<option value="">選擇書籍</option>' + books.map((book) => '<option value="' + esc(book.id) + '">' + esc(book.title) + '</option>').join('');
+      bookList.replaceChildren();
+      if (!books.length) { bookList.innerHTML = '<p class="empty-state">目前沒有書目。新增一筆你可核實的書籍資料開始建立索引。</p>'; return; }
+      for (const book of books) {
+        const card = document.createElement('article'); card.className = 'tool-card';
+        const chapterRows = chapters.filter((chapter) => chapter.bookId === book.id).map((chapter) => '<li><strong>' + esc(chapter.title) + '</strong> · ' + esc(chapter.status) + (chapter.url ? ' · <a href="' + esc(chapter.url) + '" target="_blank" rel="noreferrer">官方章節連結</a>' : '') + (chapter.notes ? '<details><summary>個人筆記與概念</summary><p>' + esc(chapter.notes).replaceAll('\n', '<br>') + '</p><p>' + esc(chapter.concepts || '') + '</p></details>' : '') + ' <button type="button" data-edit-chapter="' + esc(chapter.id) + '">編輯章節與筆記</button> <button type="button" data-delete-chapter="' + esc(chapter.id) + '">刪除章節</button></li>').join('');
+        card.innerHTML = '<h3>' + esc(book.title) + '</h3><p>' + [book.authors, book.publisher, book.edition, book.year, book.isbn, book.platform, book.language, book.specialty].filter(Boolean).map(esc).join(' · ') + '</p><p>授權狀態：' + esc(book.permission) + ' · 閱讀進度：' + Number(book.progress || 0) + '%</p><progress max="100" value="' + Number(book.progress || 0) + '"></progress>' + (book.url ? '<p><a href="' + esc(book.url) + '" target="_blank" rel="noreferrer">開啟官方書籍頁面</a></p>' : '') + '<label>更新閱讀進度 <input type="range" min="0" max="100" value="' + Number(book.progress || 0) + '" data-progress="' + esc(book.id) + '"></label><p>' + esc(book.rights || '') + '</p><h4>章節索引</h4><ul>' + (chapterRows || '<li>尚未新增章節標題。請勿以猜測填入版本的章節目錄。</li>') + '</ul><button type="button" data-edit-book="' + esc(book.id) + '">編輯書目資料</button> <button type="button" data-delete-book="' + esc(book.id) + '">刪除書目</button>';
+        bookList.append(card);
+      }
+      bookList.querySelectorAll('[data-progress]').forEach((input) => input.addEventListener('input', async (event) => { const id = event.currentTarget.dataset.progress; const record = books.find((item) => item.id === id); await saveRecord('books', { ...record, progress: Number(event.currentTarget.value), updatedAt: new Date().toISOString() }); event.currentTarget.closest('article').querySelector('progress').value = event.currentTarget.value; event.currentTarget.closest('article').querySelector('p').textContent = '授權狀態：' + record.permission + ' · 閱讀進度：' + event.currentTarget.value + '%'; }));
+      bookList.querySelectorAll('[data-delete-book]').forEach((button) => button.addEventListener('click', async () => { const id = button.dataset.deleteBook; await deleteRecord('books', id); for (const chapter of chapters.filter((item) => item.bookId === id)) await deleteRecord('chapters', chapter.id); await render(); }));
+      bookList.querySelectorAll('[data-edit-book]').forEach((button) => button.addEventListener('click', () => { const book = books.find((item) => item.id === button.dataset.editBook); if (!book) return; editingBookId = book.id; for (const [key, value] of Object.entries(book)) { const input = bookForm.elements.namedItem(key); if (input && 'value' in input) input.value = value; } document.querySelector('#cancel-book-edit').hidden = false; bookForm.querySelector('[type="submit"]').textContent = '儲存書目修改'; bookForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+      bookList.querySelectorAll('[data-edit-chapter]').forEach((button) => button.addEventListener('click', () => { const chapter = chapters.find((item) => item.id === button.dataset.editChapter); if (!chapter) return; editingChapterId = chapter.id; for (const [key, value] of Object.entries(chapter)) { const input = chapterForm.elements.namedItem(key); if (input && 'value' in input) input.value = Array.isArray(value) ? value.join(', ') : value; } document.querySelector('#cancel-chapter-edit').hidden = false; chapterForm.querySelector('[type="submit"]').textContent = '儲存章節修改'; chapterForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+      bookList.querySelectorAll('[data-delete-chapter]').forEach((button) => button.addEventListener('click', async () => { await deleteRecord('chapters', button.dataset.deleteChapter); await render(); }));
+    }
+    bookForm.querySelector('[name="progress"]').addEventListener('input', (event) => { document.querySelector('#book-progress-label').textContent = event.currentTarget.value + '%'; });
+    bookForm.addEventListener('submit', async (event) => { event.preventDefault(); const data = Object.fromEntries(new FormData(bookForm)); const previous = editingBookId ? (await allRecords('books')).find((book) => book.id === editingBookId) : null; await saveRecord('books', { ...previous, ...data, id: editingBookId || crypto.randomUUID(), progress: Number(data.progress), createdAt: previous?.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString() }); editingBookId = null; bookForm.reset(); document.querySelector('#book-progress-label').textContent = '0%'; document.querySelector('#cancel-book-edit').hidden = true; bookForm.querySelector('[type="submit"]').textContent = '加入書目'; status.textContent = '書目已儲存在目前瀏覽器。'; await render(); });
+    chapterForm.addEventListener('submit', async (event) => { event.preventDefault(); const data = Object.fromEntries(new FormData(chapterForm)); const previous = editingChapterId ? (await allRecords('chapters')).find((chapter) => chapter.id === editingChapterId) : null; await saveRecord('chapters', { ...previous, ...data, id: editingChapterId || crypto.randomUUID(), diseases: String(data.diseases || '').split(',').map((part) => part.trim()).filter(Boolean), createdAt: previous?.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString() }); editingChapterId = null; chapterForm.reset(); document.querySelector('#cancel-chapter-edit').hidden = true; chapterForm.querySelector('[type="submit"]').textContent = '加入章節'; status.textContent = '章節索引已儲存在目前瀏覽器。'; await render(); });
+    document.querySelector('#cancel-book-edit').addEventListener('click', () => { editingBookId = null; bookForm.reset(); document.querySelector('#book-progress-label').textContent = '0%'; document.querySelector('#cancel-book-edit').hidden = true; bookForm.querySelector('[type="submit"]').textContent = '加入書目'; });
+    document.querySelector('#cancel-chapter-edit').addEventListener('click', () => { editingChapterId = null; chapterForm.reset(); document.querySelector('#cancel-chapter-edit').hidden = true; chapterForm.querySelector('[type="submit"]').textContent = '加入章節'; });
+    render().catch((error) => { status.textContent = '無法開啟本機資料庫：' + error.message; });
+  </script>
+</BaseLayout>

@@ -1,17 +1,18 @@
 ---
 name: medical-hub-maintainer
-description: Maintain the existing Astro/Starlight Taiwanese physician exam website when editing pages, taxonomy, calculators, navigation or CMS; preserve current design and check changes.
+description: Maintain the Astro/Starlight Medical Learning Hub as a personal medical knowledge and learning workspace while preserving its exam sections and design system.
 ---
 
 # Medical Hub Maintainer
 
-Apply this skill when asked to update the Medical Learning Hub website.
+Use when updating site architecture, navigation, content, tools, taxonomy or visual design.
 
-1. Before editing read `AGENTS.md`, `README.md`, `src/content.config.ts`, `src/data/specialties.json`, and affected files.
-2. Keep Astro + Starlight and the existing warm neutral / deep green-grey / terracotta tokens unless redesign was requested.
-3. Classify content using only defined `medicine-3`, `medicine-4`, `medicine-5`, `medicine-6` and the current specialty IDs; do not fabricate paths or duplicate slugs.
-4. Frontmatter must follow the actual docs schema: `title`, `description`, optional `exam`, `specialty`, `tags`, `relatedSpecialties`, `relatedLiterature`, `relatedQuestions`, `sources`, `draft`.
-5. Read `publication-safety-review` before moving content into `src/content/docs` or `public`. `draft: true` is **not** privacy protection. Never move private research, patient information, copyrighted slides, or unpublished drafts into public tracked paths.
-6. When adding calculators, document formula origin, units, applicable populations, limits, inputs, and boundary tests.
-7. Run `npm test` and `npm run build` for relevant changes when the host supports them; inspect mobile layout and links if UI changes.
-8. Report files changed, tests actually run, commit/deployment status if performed, remaining blockers. Never state a test passed without executing it.
+1. Read `AGENTS.md`, `docs/AGENT_TOOLKIT.md`, `README.md`, `src/content.config.ts`, taxonomy data and affected pages first.
+2. Extend Astro + Starlight; preserve warm beige, green-grey, terracotta tokens and dark mode.
+3. Keep Medical Knowledge organized by disease/system/specialty/mechanism. Preserve `medicine-3` through `medicine-6` as exam-mode taxonomy; do not fabricate routes or specialty IDs.
+4. Validate Starlight frontmatter against the actual schema. Use the structured disease template and source labels rather than assuming every field is known.
+5. Before publishing content, run `publication-safety-review`. `draft: true` is not access control. Do not put patient information, private research, restricted books or personal records in tracked public paths.
+6. Keep personal learning data in IndexedDB/local browser storage or a properly private backend; do not add external AI transmission. Include JSON backup/restore and explain local-storage risks.
+7. For calculators, document formula, units, population, limitations, validation and boundary tests. For all medical claims, preserve source/version/date and label inference.
+8. Run requested `npm test` and `npm run build`; check added routes, mobile layout, dark mode, data import/export and links.
+9. Report changed files, actual test results, commit/PR/deploy state, source permissions and blockers. Never claim a test or deployment passed without evidence.

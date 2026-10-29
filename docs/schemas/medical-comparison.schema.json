@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Medical Learning Hub comparison",
+  "type": "object",
+  "required": ["id", "title", "diseases", "rows", "updatedAt"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "diseases": { "type": "array", "minItems": 2, "maxItems": 5, "items": { "type": "string" } },
+    "diseaseIds": { "type": "array", "items": { "type": "string" } },
+    "rows": { "type": "array", "items": { "type": "object", "required": ["name", "values", "sources", "verified", "key"], "properties": { "name": { "type": "string" }, "values": { "type": "array", "items": { "type": "string" } }, "sources": { "type": "array", "items": { "type": "string" } }, "verified": { "type": "array", "items": { "type": "boolean" } }, "key": { "type": "array", "items": { "type": "boolean" } } } } },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

@@ -8,8 +8,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <ul id="saved-list" class="card-grid"></ul>
   </main>
   <script>
-    const key='mlh-saved-v1';const list=document.querySelector('#saved-list');
-    const render=()=>{list.replaceChildren();const items=JSON.parse(localStorage.getItem(key)||'[]');if(!items.length){list.innerHTML='<li class="empty-state">目前沒有收藏。</li>';return;}for(const item of items){const li=document.createElement('li');li.className='tool-card';const a=document.createElement('a');a.href=item.url;a.textContent=item.title;a.rel='noopener noreferrer';const p=document.createElement('p');p.textContent=item.note;const del=document.createElement('button');del.textContent='移除';del.onclick=()=>{localStorage.setItem(key,JSON.stringify(items.filter(x=>x.id!==item.id)));render();};li.append(a,p,del);list.append(li);}};
-    document.querySelector('#saved-form').addEventListener('submit',(e)=>{e.preventDefault();const items=JSON.parse(localStorage.getItem(key)||'[]');items.unshift({...Object.fromEntries(new FormData(e.currentTarget)),id:crypto.randomUUID()});localStorage.setItem(key,JSON.stringify(items));e.currentTarget.reset();render();});render();
+    import { allRecords, saveRecord, deleteRecord } from '../lib/personal-db';
+    const list=document.querySelector('#saved-list');
+    const render=async()=>{list.replaceChildren();const items=await allRecords('saved');if(!items.length){list.innerHTML='<li class="empty-state">目前沒有收藏。</li>';return;}for(const item of items){const li=document.createElement('li');li.className='tool-card';const a=document.createElement('a');a.href=item.url;a.textContent=item.title;a.rel='noopener noreferrer';const p=document.createElement('p');p.textContent=item.note;const del=document.createElement('button');del.textContent='移除';del.onclick=async()=>{await deleteRecord('saved',item.id);render();};li.append(a,p,del);list.append(li);}};
+    document.querySelector('#saved-form').addEventListener('submit',async(e)=>{e.preventDefault();await saveRecord('saved',{...Object.fromEntries(new FormData(e.currentTarget)),id:crypto.randomUUID()});e.currentTarget.reset();render();});render();
   </script>
 </BaseLayout>

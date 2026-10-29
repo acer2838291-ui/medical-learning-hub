@@ -1,10 +1,12 @@
 # Medical Learning Hub
 
-臺灣醫師國考第二階段個人醫學學習網站：依醫學（三）至醫學（六）整理筆記，並逐步加入文獻閱讀、題庫、醫學計算器與比較表。
+**Medical Learning Hub — Personal Medical Knowledge & Learning Workspace**
+
+個人醫學知識與學習工作區，提供繁體中文疾病知識卡、教科書書目／章節索引、疾病比較、互動心智圖、文獻閱讀、醫學計算器及學習複習。國考筆記仍保留為醫學（三）至醫學（六）的學習模式。
 
 ## 專案狀態
 
-本專案目前處於第一階段建置。已建立 Astro + Starlight 設定、考科分類、參考站稽核文件、計算器核心函式與基礎頁面原型。依賴已安裝，正式 Build 與計算器測試已通過；請查看 [`docs/test-report.md`](docs/test-report.md)。
+本專案使用 Astro + Starlight。新增的書目、章節、比較表、心智圖、收藏及個人複習資料以 IndexedDB 保存在目前瀏覽器，並可透過工作區匯出／匯入 JSON。它不是雲端備份：換電腦、清除網站資料或共用裝置都可能造成遺失或暴露，請定期匯出並妥善保管備份。私人資料不會自動傳送至外部 AI API。
 
 ## 技術
 
@@ -27,7 +29,11 @@ npm test
 npm run build
 ```
 
-`npm install`、`npm run build` 與 `npm test` 已在 2026-10-27 執行成功。建置會顯示一則 `/404` 路由優先順序警告，但已成功輸出 57 個頁面與 Pagefind 搜尋索引。npm 也會提示環境中的 `http-proxy` 設定名稱未知；這不影響安裝或建置。
+`npm ci`、`npm test` 與 `npm run build` 用於驗證變更。部署及測試狀態請查看最新 Pull Request 的 GitHub Actions 執行結果。
+
+## 個人工作區與授權
+
+教科書目錄只保存使用者輸入的書目和官方連結，不預置未核實版本或虛構章節。AccessMedicine 的目錄連結不表示網站取得全文或 AI 處理授權；請先閱讀 [`docs/accessmedicine-access-review.md`](docs/accessmedicine-access-review.md)。在適用的書面授權確認前，不要讓 AI Agent 存取受限制全文、批次擷取內容或製作逐段翻譯。示範疾病條目明確標示來源、授權與待驗證資訊。
 
 ## 內容分類
 

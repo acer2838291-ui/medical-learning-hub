@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Medical Learning Hub textbook record",
+  "type": "object",
+  "required": ["id", "title", "permission", "progress"],
+  "properties": {
+    "id": { "type": "string" }, "title": { "type": "string" }, "authors": { "type": "string" },
+    "publisher": { "type": "string" }, "edition": { "type": "string" }, "year": { "type": "string" },
+    "isbn": { "type": "string" }, "url": { "type": "string", "format": "uri" },
+    "platform": { "type": "string" }, "language": { "type": "string" }, "specialty": { "type": "string" },
+    "permission": { "enum": ["unverified", "bibliography-only", "personal-notes", "written-ai-permission"] },
+    "rights": { "type": "string" }, "progress": { "type": "integer", "minimum": 0, "maximum": 100 }
+  }
+}
