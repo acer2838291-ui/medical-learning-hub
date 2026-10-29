@@ -3,7 +3,7 @@
 - **Checked:** 2026-10-30 (Asia/Taipei)
 - **Repository:** `acer2838291-ui/medical-learning-hub`, public GitHub Pages project
 - **Purpose:** Determine whether the public site may index AccessMedicine records and process licensed text with this AI/browser workflow.
-- **Important boundary:** No AccessMedicine restricted textbook page was opened, copied, downloaded, screenshotted, crawled, or sent to an AI system.
+- **Important boundary:** One user-linked restricted chapter page was opened and its page text was exposed to this AI-powered browser session on 2026-10-30 before the publisher restriction was checked against the current operation. No chapter text, screenshot, image, or PDF has been committed to this public repository. Further AI interaction with restricted AccessMedicine pages has stopped pending written permission.
 
 ## Findings
 
@@ -16,6 +16,16 @@
 | [ERMG help / user manual](https://sw.lib.csmu.edu.tw/media/re_csmu/infosettingf/1743407521.pdf) | Linked from the ERMG home page. The resource page visibly offers Login and personal-service/favorites features. The public pages did not reveal the required CSMU account type, off-campus method, or any institution-specific license terms. | Account type and off-campus access method are **pending library confirmation**. Do not infer these from ERMG availability or a successful personal login. |
 
 The ERMG catalog record was checked without opening AccessMedicine content. To verify the cloud-browser connection failure, the official homepage was freshly opened and its Login link followed once. The resulting redirect showed no login form; this agent tested no account and did not request or enter credentials. The user separately reports that their local Chrome session can sign in through the CSMU off-campus proxy and display full text. That report indicates functional access for the user's session, but does not establish that an external AI agent may access, process, translate, or retain the material.
+
+### User-linked Work-mode chapter page check
+
+- **Date:** 2026-10-30 (Asia/Taipei).
+- **Entry:** The user supplied the Chapter 295 URL; the connected Chrome extension exposed the existing tab, whose page identified the institutional provider as Chung Shan Medical University.
+- **Observed page metadata:** Harrison's Principles of Internal Medicine, 22nd Edition; Chapter 295, “Approach to the Patient with Disease of the Respiratory System.” The page returned readable chapter text in the AI browser context. This confirms technical access only; it does not establish that the access or processing was authorized under the publisher or institutional license.
+- **Table check:** One HTML table was present with two column headers and eight table rows total (one header row plus seven data rows). Caption, footnotes, merged cells, and comparison against a publisher PDF were not verified. Therefore table completeness is **PARTIAL / NOT VERIFIED**.
+- **Image check:** Nine `<img>` elements were present; none had figure-like alt text or class metadata. This does not prove there are no medical figures because figures may be implemented as CSS, links, or other embedded assets. Figure completeness is **NOT VERIFIED**.
+- **PDF check:** The page showed a “Download Section PDF” control followed by “Sign in to Download.” No PDF was downloaded. PDF availability is **BLOCKED / NOT TESTED**.
+- **Follow-up:** After checking the publisher's current Terms of Use, no further page interaction, extraction, screenshotting, downloading, or content-derived study material was performed. The restricted page text is not included in this report or repository.
 
 ### ERMG cloud-browser connection incident
 
